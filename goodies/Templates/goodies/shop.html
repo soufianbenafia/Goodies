@@ -217,7 +217,8 @@
                                                     <img src="{{product.image.url}}" class="img-fluid" alt="Image">
                                                     <div class="mask-icon">
                                                         <ul>
-                                                            <li><a href="{% url 'shopdetail' %}" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                                            <li><a data-product="{{product.name}}" class="view-detail"  data-toggle="tooltip" data-placement="right" title="View">
+                                                                <i class="fas fa-eye"></i></a></li>
                                                         </ul>
                                                         <a class="cart" href="#">Add to Cart</a>
                                                     </div>
@@ -256,8 +257,8 @@
                                                 <div class="col-sm-6 col-md-6 col-lg-8 col-xl-8">
                                                     <div class="why-text full-width">
                                                         <h4>{{product.name}}</h4>
-                                                        <h5> <del>$ 60.00</del> $40.79</h5>
-                                                        <p>{{product.name}}</p>
+                                                        <h5>$40.79</h5>
+                                                        <p>{{ product.discription|linebreaks }}</p>
                                                         <a class="btn hvr-hover" href="#">Add to Cart</a>
                                                     </div>
                                                 </div>
@@ -464,6 +465,7 @@
      <script src="{% static 'js/form-validator.min.js'%}"></script>
      <script src="{% static 'js/contact-form-script.js'%}"></script>
      <script src="{% static 'js/custom.js' %}"></script>
+     <script src="{% static 'js/cart.js' %}"></script>
 {% endblock content %}
 
 </body>

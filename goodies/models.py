@@ -15,25 +15,15 @@ class Product(models.Model):
     categoryID = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, unique=True)
     price = models.DecimalField(max_digits=4, decimal_places=2)
+    availability = models.IntegerField(default=10)
+    discription = models.TextField(blank=True,null=True,)
     image = ResizedImageField(size=[370, 350])
 
     def __str__(self):
         return self.name
 
-
-class ProductDetail(models.Model):
-    productID = models.OneToOneField(
-        Product, on_delete=models.CASCADE, primary_key=True)
-    availability = models.IntegerField()
-    discriptionTitle = models.CharField(max_length=100, blank=True, null=True)
-    discription = models.TextField()
-
-    def __str__(self):
-        return self.discriptionTitle
-
-
 class ProductDetailImage(models.Model):
-    productID = models.ForeignKey(ProductDetail, on_delete=models.CASCADE)
+    productID = models.ForeignKey(Product, on_delete=models.CASCADE)
     image = models.ImageField()
 
     def __str__(self):
