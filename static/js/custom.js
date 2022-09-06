@@ -91,7 +91,7 @@
                 filter: filterValue
             });
         });
-        var $grid = $('.special-list').isotope({
+        var $grid = $('.special-listt').isotope({
             itemSelector: '.col-xl-4'
         });
     });
