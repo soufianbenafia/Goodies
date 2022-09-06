@@ -1,7 +1,8 @@
-from email.mime import image
+from django.urls import reverse
 from django.db import models
 from django.contrib.auth.models import User
 from django_resized import ResizedImageField
+from django_extensions.db.fields import AutoSlugField
 
 
 class Category(models.Model):
@@ -16,18 +17,23 @@ class Product(models.Model):
     name = models.CharField(max_length=100, unique=True)
     price = models.DecimalField(max_digits=4, decimal_places=2)
     availability = models.IntegerField(default=10)
-    discription = models.TextField(blank=True,null=True,)
+    discription = models.TextField(blank=True, null=True)
+    slug = models.SlugField()
     image = ResizedImageField(size=[370, 350])
+
+    def get_absolute_url(self):
+        return reverse('shopdetail', args=[self.slug])
 
     def __str__(self):
         return self.name
+
 
 class ProductDetailImage(models.Model):
     productID = models.ForeignKey(Product, on_delete=models.CASCADE)
     image = models.ImageField()
 
-    def __str__(self):
-        return self.id
+    # def __str__(self):
+    #     return self.productID.name
 
 
 class Customer(models.Model):
