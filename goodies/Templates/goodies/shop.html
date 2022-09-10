@@ -223,7 +223,7 @@
                                                             <li><a  href="{{product.get_absolute_url}}" data-toggle="tooltip" data-placement="right" title="View">
                                                                 <i  class="fas fa-eye"></i></a></li>
                                                         </ul>
-                                                        <a class="cart" href="#">Add to Cart</a>
+                                                        <a id="add-button" data-value="{{product.id}}"  class="cart" >Add to Cart</a>
                                                     </div>
                                                 </div>
                                                 <div class="why-text">
@@ -468,7 +468,7 @@
      <script src="{% static 'js/form-validator.min.js'%}"></script>
      <script src="{% static 'js/contact-form-script.js'%}"></script>
      <script src="{% static 'js/custom.js' %}"></script>
-     <script src="{% static 'js/cart.js' %}"></script>
+     <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
 
      <script type="text/javascript"> 
         function getToken(name) {
@@ -488,6 +488,26 @@
 		}
 		var csrftoken = getToken('csrftoken')
      </script>
+
+     <script>
+        $(document).on('click', '#add-button', function(e) {
+            e.preventDefault();
+            console.log($('#add-button').data("value"))
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'cart_add' %}',
+                data: {
+                    productid: $('#add-button').data("value"),
+                    csrfmiddlewaretoken: "{{csrf_token}}",
+                    action: 'post'
+                },
+                success: function(json) {
+        
+                },
+                error: function(xhr, errmsg, err) {}
+            });
+        })
+    </script>
 {% endblock content %}
 
 </body>
