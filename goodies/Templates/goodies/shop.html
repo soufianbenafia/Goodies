@@ -84,15 +84,6 @@
                     <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
                         <li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
-                        {% comment %} <li class="dropdown">
-                            <a href="#" class="nav-link dropdown-toggle arrow" data-toggle="dropdown"></a>
-                            <ul class="dropdown-menu">
-								<li><a href="shop-detail.html">Shop Detail</a></li>
-                                <li><a href="checkout.html">Checkout</a></li>
-                                <li><a href="my-account.html">My Account</a></li>
-                                <li><a href="wishlist.html">Wishlist</a></li>
-                            </ul>
-                        </li> {% endcomment %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'shop' %}">SHOP</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
                     </ul>
@@ -105,7 +96,15 @@
                         <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
                         <li class="side-menu"><a href="#">
 						<i class="fa fa-shopping-bag"></i>
-                            <span class="badge">3</span>
+                            {% with total_qty=basket|length %}
+                            <span id="basket-qty" class="badge">
+                                {% if total_qty > 0 %}
+                                    {{ total_qty }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </span>
+                            {% endwith %} 
 							<p>My Cart</p>
 					</a></li>
                     </ul>
@@ -223,7 +222,7 @@
                                                             <li><a  href="{{product.get_absolute_url}}" data-toggle="tooltip" data-placement="right" title="View">
                                                                 <i  class="fas fa-eye"></i></a></li>
                                                         </ul>
-                                                        <a id="add-button" data-value="{{product.id}}"  class="cart" >Add to Cart</a>
+                                                        <a  data-value="{{product.id}}" data-qty="1" class="cart add-button" >Add to Cart</a>
                                                     </div>
                                                 </div>
                                                 <div class="why-text">
@@ -468,7 +467,7 @@
      <script src="{% static 'js/form-validator.min.js'%}"></script>
      <script src="{% static 'js/contact-form-script.js'%}"></script>
      <script src="{% static 'js/custom.js' %}"></script>
-     <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+     <script src="{% static 'js/cart.js' %}"></script>
 
      <script type="text/javascript"> 
         function getToken(name) {
@@ -488,26 +487,6 @@
 		}
 		var csrftoken = getToken('csrftoken')
      </script>
-
-     <script>
-        $(document).on('click', '#add-button', function(e) {
-            e.preventDefault();
-            console.log($('#add-button').data("value"))
-            $.ajax({
-                type: 'POST',
-                url: '{% url 'cart_add' %}',
-                data: {
-                    productid: $('#add-button').data("value"),
-                    csrfmiddlewaretoken: "{{csrf_token}}",
-                    action: 'post'
-                },
-                success: function(json) {
-        
-                },
-                error: function(xhr, errmsg, err) {}
-            });
-        })
-    </script>
 {% endblock content %}
 
 </body>

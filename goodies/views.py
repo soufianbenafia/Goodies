@@ -59,8 +59,10 @@ def cart_add(request):
     if request.POST.get('action') == 'post':
         print(request.POST.get('productid'))
         product_id = int(request.POST.get('productid'))
+        product_qty = int(request.POST.get('qty'))
         product = get_object_or_404(Product,id=product_id)
-        basket.add(product=product)
+        basket.add(product=product,product_qty=product_qty)
 
-        response = JsonResponse({'test':'subtotal'})
+        basketqty = basket.__len__()
+        response = JsonResponse({'qty': basketqty})
         return response
