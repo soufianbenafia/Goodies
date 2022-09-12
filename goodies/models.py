@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django_resized import ResizedImageField
 from django_extensions.db.fields import AutoSlugField
 
+class ProductManager(models.Manager):
+    def get_queryset(self):
+        return super(ProductManager, self).get_queryset().filter()
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -20,9 +23,31 @@ class Product(models.Model):
     discription = models.TextField(blank=True, null=True)
     slug = models.SlugField()
     image = ResizedImageField(size=[370, 350])
+    objects = models.Manager()
+    products = ProductManager()
+
+#  success: function(json) {
+#                 $.each(json, function(key, val) {
+#                     console.log(`${key} = ${val}`);
+#                     $.each(JSON.parse(val), function(key, val) {
+#                         console.log("productID " + `${key}`);
+#                         $.each(val, function(key, val) {
+#                             if (key == "price") {
+#                                 console.log(`${key} = ${val}`);
+#                             }
+#                         });
+
+#                     });
+
+#                 });
+
+#                 //console.log(json)
+#                 //document.getElementById("basket-qty").innerHTML = json.qty;
+#             },
 
     def get_absolute_url(self):
         return reverse('shopdetail', args=[self.slug])
+
 
     def __str__(self):
         return self.name

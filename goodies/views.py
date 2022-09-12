@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from goodies.basket import Basket
 from django.http import JsonResponse
+import json 
 
 from goodies.models import Category, Product, ProductDetailImage
 
@@ -64,5 +65,7 @@ def cart_add(request):
         basket.add(product=product,product_qty=product_qty)
 
         basketqty = basket.__len__()
+        json_object = json.dumps(basket.getBasketFully()) 
+        print(json_object)
         response = JsonResponse({'qty': basketqty})
         return response

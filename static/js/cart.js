@@ -56,7 +56,25 @@
                 csrfmiddlewaretoken: "{{getToken('csrftoken')}}",
                 action: 'post'
             },
+
+
+            // success: function(json) {
+            //     $.each(json, function(key, val) {
+            //         console.log(`${key} = ${val}`);
+            //         $.each(JSON.parse(val), function(key, val) {
+            //             console.log("productID " + `${key}`);
+            //             $.each(val, function(key, val) {
+            //                 if (key == "price") {
+            //                     console.log(`${key} = ${val}`);
+            //                 }
+            //             });
+
+            //         });
+
+            //     });
+            // },
             success: function(json) {
+
                 document.getElementById("basket-qty").innerHTML = json.qty;
             },
             error: function(xhr, errmsg, err) {}
