@@ -67,11 +67,14 @@ class Basket():
         for product in products:
             basket[str(product.id)]['name'] = product.name
             basket[str(product.id)]['image'] = product.image.url
+            basket[str(product.id)]['price'] = product.price
+
 
 
         for item in basket.values():
-            # item['price'] = Decimal(item['price'])
-            item['total_price'] = item['price'] * item['qty']
+            item['price'] = str(item['price'])
+            totalPrice = Decimal(item['price']) * Decimal(item['qty'])
+            item['total_price'] = str(totalPrice)
         
 
         return basket

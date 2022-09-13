@@ -67,5 +67,5 @@ def cart_add(request):
         basketqty = basket.__len__()
         json_object = json.dumps(basket.getBasketFully()) 
         print(json_object)
-        response = JsonResponse({'qty': basketqty})
+        response = JsonResponse({'qty': json_object})
         return response

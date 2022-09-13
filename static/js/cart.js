@@ -36,8 +36,9 @@
                 action: 'post'
             },
             success: function(json) {
-                document.getElementById("basket-qty").innerHTML = json.qty;
+                generateCartSide(json)
             },
+
             error: function(xhr, errmsg, err) {}
 
         });
@@ -56,30 +57,85 @@
                 csrfmiddlewaretoken: "{{getToken('csrftoken')}}",
                 action: 'post'
             },
-
-
-            // success: function(json) {
-            //     $.each(json, function(key, val) {
-            //         console.log(`${key} = ${val}`);
-            //         $.each(JSON.parse(val), function(key, val) {
-            //             console.log("productID " + `${key}`);
-            //             $.each(val, function(key, val) {
-            //                 if (key == "price") {
-            //                     console.log(`${key} = ${val}`);
-            //                 }
-            //             });
-
-            //         });
-
-            //     });
-            // },
             success: function(json) {
-
-                document.getElementById("basket-qty").innerHTML = json.qty;
+                generateCartSide(json)
             },
             error: function(xhr, errmsg, err) {}
 
         });
     })
+
+    function generateCartSide(json) {
+        var cartBox = $('li.cart-box');
+        cartBox.empty()
+        var ul;
+        $.each(json, function(key, val) {
+            console.log(`${key} = ${val}`);
+            $.each(JSON.parse(val), function(key, val) {
+                ul = $("<ul></ul>")
+                ul.addClass('cart-list')
+                cartBox.append(ul)
+
+                var li = $("<li></li>")
+                ul.append(li)
+
+                var a = $("<a></a>")
+                a.addClass('photo')
+                li.append(a)
+
+                var img = $('<img id="dynamic">');
+                img.addClass('cart-thumb')
+                a.append(img)
+
+                var h6 = $("<h6></h6>")
+                var h6_a = $("<a></a>")
+                h6.append(h6_a)
+                li.append(h6)
+
+                var p = $("<p></p>")
+                var p_span = $("<span></span>")
+                p_span.addClass('price')
+                li.append(p)
+
+                console.log(cartBox)
+                console.log("productID " + `${key}`);
+                var price;
+                $.each(val, function(key, val) {
+                    if (key == "image") {
+                        img.attr('src', `${val}`);
+                        console.log(`${key} = ${val}`);
+                    }
+                    if (key == "name") {
+                        h6_a.text(`${val}`);
+                        console.log(`${key} = ${val}`);
+                    }
+                    if (key == "qty" || key == "price") {
+                        if (key == "price") {
+                            price = `${val}`
+                            console.log(`${key} =` + price);
+                        }
+
+                        if (key == "qty") {
+                            console.log("price " + price)
+                            p.html(`${val} - ` + '<span class="price">' + price + '</span>');
+                        }
+                    }
+                });
+            });
+        });
+        var liTotal = $("<li></li>")
+        liTotal.addClass('total')
+        ul.append(liTotal)
+        var aTotal = $("<a></a>")
+        aTotal.addClass('btn btn-default hvr-hover btn-cart')
+        aTotal.attr("href", "/cart.html/")
+        aTotal.text('VIEW CART')
+        liTotal.append(aTotal)
+
+        var spanTotal = $("<span></span>")
+        spanTotal.addClass('float-right')
+        liTotal.append(spanTotal)
+        spanTotal.html('<strong>' + "Total" + '</strong>' + ": $180.00");
+    }
 
 }(jQuery));
