@@ -76,7 +76,7 @@ class Basket():
             totalPrice = Decimal(item['price']) * Decimal(item['qty'])
             item['total_price'] = str(totalPrice)
         
-
+        
         return basket
 
 

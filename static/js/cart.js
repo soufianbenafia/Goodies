@@ -36,6 +36,7 @@
                 action: 'post'
             },
             success: function(json) {
+                document.getElementById("basket-qty").innerHTML = calculateQtySum(json);
                 generateCartSide(json)
             },
 
@@ -58,12 +59,32 @@
                 action: 'post'
             },
             success: function(json) {
+                document.getElementById("basket-qty").innerHTML = calculateQtySum(json);
                 generateCartSide(json)
             },
             error: function(xhr, errmsg, err) {}
 
         });
     })
+
+
+    function calculateQtySum(json) {
+        var qtySum = 0;
+        $.each(json, function(key, val) {
+            $.each(JSON.parse(val), function(key, val) {
+                $.each(val, function(key, val) {
+                    if (key == "qty") {
+                        qty = `${val}`
+                        console.log("qty: " + qty);
+
+                        qtySum = qtySum + parseInt(qty);
+                        console.log("qtySum: " + qtySum);
+                    }
+                });
+            });
+        });
+        return qtySum.toString();
+    }
 
     function generateCartSide(json) {
         var cartBox = $('li.cart-box');
@@ -99,7 +120,7 @@
 
                 console.log(cartBox)
                 console.log("productID " + `${key}`);
-                var price;
+                var qty;
                 $.each(val, function(key, val) {
                     if (key == "image") {
                         img.attr('src', `${val}`);
@@ -109,15 +130,16 @@
                         h6_a.text(`${val}`);
                         console.log(`${key} = ${val}`);
                     }
-                    if (key == "qty" || key == "price") {
-                        if (key == "price") {
-                            price = `${val}`
-                            console.log(`${key} =` + price);
+                    if (key == "qty" || key == "total_price") {
+                        if (key == "qty") {
+                            qty = `${val}`
+                            console.log(`${key} =` + qty);
                         }
 
-                        if (key == "qty") {
-                            console.log("price " + price)
-                            p.html(`${val} - ` + '<span class="price">' + price + '</span>');
+                        if (key == "total_price") {
+                            console.log("total_price " + `${val}`)
+                            console.log("qty " + qty)
+                            p.html(qty + "  - " + '<span class="price">' + `${val}` + '</span>');
                         }
                     }
                 });
