@@ -68,6 +68,23 @@
     })
 
 
+    function calculateTotal(json) {
+        var total = 0;
+        $.each(json, function(key, val) {
+            $.each(JSON.parse(val), function(key, val) {
+                $.each(val, function(key, val) {
+                    if (key == "total_price") {
+                        var total_price = `${val}`
+
+                        total += parseFloat(total_price);
+
+                    }
+                });
+            });
+        });
+        return parseFloat(total).toFixed(2);
+    }
+
     function calculateQtySum(json) {
         var qtySum = 0;
         $.each(json, function(key, val) {
@@ -157,7 +174,8 @@
         var spanTotal = $("<span></span>")
         spanTotal.addClass('float-right')
         liTotal.append(spanTotal)
-        spanTotal.html('<strong>' + "Total" + '</strong>' + ": $180.00");
+        console.log("total: " + calculateTotal(json));
+        spanTotal.html('<strong>' + "Total: " + '</strong>' + calculateTotal(json));
     }
 
 }(jQuery));

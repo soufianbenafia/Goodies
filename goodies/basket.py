@@ -54,6 +54,12 @@ class Basket():
             yield item
 
 
+    def getCompletePrice(self):
+        completePrice = 0;
+        basket = self.basket.copy()
+        for item in basket.values():
+            completePrice += Decimal(item['total_price'])
+        return completePrice
 
     def getBasketFully(self):
         """
@@ -76,7 +82,7 @@ class Basket():
             totalPrice = Decimal(item['price']) * Decimal(item['qty'])
             item['total_price'] = str(totalPrice)
         
-        
+
         return basket
 
 
