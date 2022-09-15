@@ -26,6 +26,16 @@ class Basket():
             self.basket[product_id] = {'price': int(product.price), 'qty': int(product_qty)}
 
         self.save()
+    
+    def update(self, product, product_qty):
+        product_id = product.id
+
+        product_id = str(product.id)
+        productSession = self.basket.get(product_id)
+        productSession['qty'] = product_qty
+        
+        self.save()
+
 
     def save(self):
         self.session.modified = True

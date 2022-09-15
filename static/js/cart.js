@@ -2,16 +2,16 @@
 
 
 
-    $('#quantity-add').on('input', function(e) {
+    $('.quantity-update').on('input', function(e) {
         e.preventDefault();
         console.log($(this).val())
         console.log($(this).data("qty"))
         $.ajax({
             type: 'POST',
-            url: '/add/',
+            url: '/update/',
             data: {
                 productid: $(this).data("value"),
-                qty: $(this).data("qty"),
+                qty: $(this).val(),
                 csrfmiddlewaretoken: "{{getToken('csrftoken')}}",
                 action: 'post'
             },

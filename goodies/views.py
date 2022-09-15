@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from goodies.basket import Basket
 from django.http import JsonResponse
-import json 
+import json
 
 from goodies.models import Category, Product, ProductDetailImage
 
@@ -55,17 +55,32 @@ def account(request):
     context = {}
     return render(request, 'goodies/my-account.html', context)
 
+
 def cart_add(request):
     basket = Basket(request)
     if request.POST.get('action') == 'post':
         print(request.POST.get('productid'))
         product_id = int(request.POST.get('productid'))
         product_qty = int(request.POST.get('qty'))
-        product = get_object_or_404(Product,id=product_id)
-        basket.add(product=product,product_qty=product_qty)
+        product = get_object_or_404(Product, id=product_id)
+        basket.add(product=product, product_qty=product_qty)
 
-        basketqty = basket.__len__()
-        json_object = json.dumps(basket.getBasketFully()) 
+        json_object = json.dumps(basket.getBasketFully())
+        print(json_object)
+        response = JsonResponse({'qty': json_object})
+        return response
+
+
+def cart_update(request):
+    basket = Basket(request)
+    if request.POST.get('action') == 'post':
+        print(request.POST.get('productid'))
+        product_id = int(request.POST.get('productid'))
+        product_qty = int(request.POST.get('qty'))
+        product = get_object_or_404(Product, id=product_id)
+        basket.update(product=product, product_qty=product_qty)
+
+        json_object = json.dumps(basket.getBasketFully())
         print(json_object)
         response = JsonResponse({'qty': json_object})
         return response
