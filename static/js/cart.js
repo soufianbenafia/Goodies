@@ -1,6 +1,30 @@
 (function($) {
 
 
+
+    $('#quantity-add').on('input', function(e) {
+        e.preventDefault();
+        console.log($(this).val())
+        console.log($(this).data("qty"))
+        $.ajax({
+            type: 'POST',
+            url: '/add/',
+            data: {
+                productid: $(this).data("value"),
+                qty: $(this).data("qty"),
+                csrfmiddlewaretoken: "{{getToken('csrftoken')}}",
+                action: 'post'
+            },
+            success: function(json) {
+                document.getElementById("basket-qty").innerHTML = calculateQtySum(json);
+                generateCartSide(json)
+            },
+            error: function(xhr, errmsg, err) {}
+
+        });
+    });
+
+
     function getToken(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie !== '') {

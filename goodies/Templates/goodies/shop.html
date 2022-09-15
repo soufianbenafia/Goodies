@@ -281,6 +281,7 @@
                                 <h3>Categories</h3>
                             </div>
                             <div class="list-group list-group-collapse list-group-sm list-group-tree" id="list-group-men" data-children=".sub-men">
+                                <button class="list-group-item list-group-item-action" data-filter="*">All</button>
                                 {% for category in categories %}
                                 <button data-filter=".{{category.name}}" class="list-group-item list-group-item-action">{{category.name}}</button>
                                 {% endfor %} 
