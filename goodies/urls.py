@@ -11,6 +11,6 @@ urlpatterns = [
     path('my-account.html/',views.account,name="account"),
     path('shop/<slug:slug>/',views.shopDetail,name="shopdetail"),
     path('add/',views.cart_add,name='cart_add'),
-    path('update/',views.cart_update,name='cart_update')
-
+    path('update/',views.cart_update,name='cart_update'),
+    path('delete/',views.cart_delete,name='cart_delete')
 ]

@@ -1,5 +1,26 @@
 (function($) {
 
+    $('.remove-pr').on('click', function(e) {
+        e.preventDefault();
+        var prodID = $(this).data("value")
+        console.log("prodID: " + prodID)
+        $.ajax({
+            type: 'POST',
+            url: '/delete/',
+            data: {
+                productid: $(this).data("value"),
+                csrfmiddlewaretoken: "{{getToken('csrftoken')}}",
+                action: 'post'
+            },
+            success: function(json) {
+                $('.delete-itemcart[data-value="' + prodID + '"]').remove();
+                document.getElementById("basket-qty").innerHTML = calculateQtySum(json);
+                generateCartSide(json)
+            },
+            error: function(xhr, errmsg, err) {}
+
+        });
+    });
 
 
     $('.quantity-update').on('input', function(e) {
@@ -17,12 +38,10 @@
             success: function(json) {
                 $.each(json, function(key, val) {
                     $.each(JSON.parse(val), function(key, val) {
-                        console.log("product_id " + prodID)
                         if (key == prodID) {
                             $.each(val, function(key, val) {
                                 if (key == "total_price") {
                                     var total_price = `${val}`
-                                    console.log("total_price " + total_price)
                                     $('.total-prp[data-index="' + prodID + '"]').text(total_price);
                                 }
                             });

@@ -84,3 +84,14 @@ def cart_update(request):
         print(json_object)
         response = JsonResponse({'qty': json_object})
         return response
+
+
+def cart_delete(request):
+    basket = Basket(request)
+    if request.POST.get('action') == 'post':
+        print(request.POST.get('productid'))
+        product_id = int(request.POST.get('productid'))
+        basket.delete(product=product_id)
+        json_object = json.dumps(basket.getBasketFully())
+        response = JsonResponse({'qty': json_object})
+        return response
