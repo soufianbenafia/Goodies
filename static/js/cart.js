@@ -4,8 +4,7 @@
 
     $('.quantity-update').on('input', function(e) {
         e.preventDefault();
-        console.log($(this).val())
-        console.log($(this).data("qty"))
+        var prodID = $(this).data("value")
         $.ajax({
             type: 'POST',
             url: '/update/',
@@ -16,6 +15,20 @@
                 action: 'post'
             },
             success: function(json) {
+                $.each(json, function(key, val) {
+                    $.each(JSON.parse(val), function(key, val) {
+                        console.log("product_id " + prodID)
+                        if (key == prodID) {
+                            $.each(val, function(key, val) {
+                                if (key == "total_price") {
+                                    var total_price = `${val}`
+                                    console.log("total_price " + total_price)
+                                    $('.total-prp[data-index="' + prodID + '"]').text(total_price);
+                                }
+                            });
+                        }
+                    });
+                });
                 document.getElementById("basket-qty").innerHTML = calculateQtySum(json);
                 generateCartSide(json)
             },
@@ -48,8 +61,6 @@
 
     $(document).on('click', '.add-button', function(e) {
         e.preventDefault();
-        console.log($(this).data("value"))
-        console.log($(this).data("qty"))
         $.ajax({
             type: 'POST',
             url: '/add/',
@@ -71,8 +82,6 @@
 
     $(document).on('click', '.add-button-detail', function(e) {
         e.preventDefault();
-        console.log($('#addToCart').val())
-        console.log($('#addToCart').data("value"))
         $.ajax({
             type: 'POST',
             url: '/add/',
@@ -99,7 +108,6 @@
                 $.each(val, function(key, val) {
                     if (key == "total_price") {
                         var total_price = `${val}`
-
                         total += parseFloat(total_price);
 
                     }
@@ -116,10 +124,7 @@
                 $.each(val, function(key, val) {
                     if (key == "qty") {
                         qty = `${val}`
-                        console.log("qty: " + qty);
-
                         qtySum = qtySum + parseInt(qty);
-                        console.log("qtySum: " + qtySum);
                     }
                 });
             });
@@ -132,7 +137,6 @@
         cartBox.empty()
         var ul;
         $.each(json, function(key, val) {
-            console.log(`${key} = ${val}`);
             $.each(JSON.parse(val), function(key, val) {
                 ul = $("<ul></ul>")
                 ul.addClass('cart-list')
@@ -159,27 +163,20 @@
                 p_span.addClass('price')
                 li.append(p)
 
-                console.log(cartBox)
-                console.log("productID " + `${key}`);
                 var qty;
                 $.each(val, function(key, val) {
                     if (key == "image") {
                         img.attr('src', `${val}`);
-                        console.log(`${key} = ${val}`);
                     }
                     if (key == "name") {
                         h6_a.text(`${val}`);
-                        console.log(`${key} = ${val}`);
                     }
                     if (key == "qty" || key == "total_price") {
                         if (key == "qty") {
                             qty = `${val}`
-                            console.log(`${key} =` + qty);
                         }
 
                         if (key == "total_price") {
-                            console.log("total_price " + `${val}`)
-                            console.log("qty " + qty)
                             p.html(qty + "  - " + '<span class="price">' + `${val}` + '</span>');
                         }
                     }
@@ -198,7 +195,6 @@
         var spanTotal = $("<span></span>")
         spanTotal.addClass('float-right')
         liTotal.append(spanTotal)
-        console.log("total: " + calculateTotal(json));
         spanTotal.html('<strong>' + "Total: " + '</strong>' + calculateTotal(json));
     }
 

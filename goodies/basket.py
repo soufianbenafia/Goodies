@@ -32,7 +32,7 @@ class Basket():
 
         product_id = str(product.id)
         productSession = self.basket.get(product_id)
-        productSession['qty'] = product_qty
+        productSession['qty'] = int(product_qty)
         
         self.save()
 
