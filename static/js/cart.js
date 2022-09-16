@@ -3,7 +3,6 @@
     $('.remove-pr').on('click', function(e) {
         e.preventDefault();
         var prodID = $(this).data("value")
-        console.log("prodID: " + prodID)
         $.ajax({
             type: 'POST',
             url: '/delete/',
@@ -48,6 +47,9 @@
                         }
                     });
                 });
+                console.log("subtotal: " + calculateSubTotal(json))
+
+                $('.sub-total-update').text("€ " + calculateSubTotal(json));
                 document.getElementById("basket-qty").innerHTML = calculateQtySum(json);
                 generateCartSide(json)
             },
@@ -120,7 +122,7 @@
     })
 
 
-    function calculateTotal(json) {
+    function calculateSubTotal(json) {
         var total = 0;
         $.each(json, function(key, val) {
             $.each(JSON.parse(val), function(key, val) {
@@ -214,7 +216,7 @@
         var spanTotal = $("<span></span>")
         spanTotal.addClass('float-right')
         liTotal.append(spanTotal)
-        spanTotal.html('<strong>' + "Total: " + '</strong>' + calculateTotal(json));
+        spanTotal.html('<strong>' + "Total: " + '</strong>' + calculateSubTotal(json));
     }
 
 }(jQuery));

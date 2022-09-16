@@ -81,6 +81,12 @@ class Basket():
             completePrice += Decimal(item['total_price'])
         return completePrice
 
+
+    def getTaxPrice(self):
+        subTotal = self.getCompletePrice();
+        tax = round((subTotal/100)*7, 2)
+        return tax
+
     def getBasketFully(self):
         """
         Collect the product_id in the session data to query the database
