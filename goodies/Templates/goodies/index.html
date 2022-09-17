@@ -101,44 +101,45 @@
                 </div>
                 <!-- /.navbar-collapse -->
 
-                <!-- Start Atribute Navigation -->
-                <div class="attr-nav">
-                    <ul>
-                        {% comment %} <li class="search"><a href="#"><i class="fa fa-search"></i></a></li> {% endcomment %}
-                        <li class="side-menu">
-							<a href="{% url 'cart' %}">
-								<i class="fa fa-shopping-bag"></i>
-								<span class="badge">3</span>
-								<p>My Cart</p>
-							</a>
-						</li>
-                    </ul>
-                </div>
+              <!-- Start Atribute Navigation -->
+              <div class="attr-nav">
+                <ul>
+                    <li class="search"><a href="#"><i class="fa fa-search"></i></a></li>
+                    <li class="side-menu"><a href="#">
+                    <i class="fa fa-shopping-bag"></i>
+                        {% with total_qty=basket|length %}
+                        <span id="basket-qty" class="badge">
+                            {% if total_qty > 0 %}
+                                {{ total_qty }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </span>
+                        {% endwith %} 
+                        <p>My Cart</p>
+                </a></li>
+                </ul>
+            </div>
                 <!-- End Atribute Navigation -->
             </div>
-            <!-- Start Side Menu -->
-            <div class="side">
+             <!-- Start Side Menu -->
+             <div class="side">
                 <a href="#" class="close-side"><i class="fa fa-times"></i></a>
                 <li class="cart-box">
                     <ul class="cart-list">
+                        {% for item in basket %}
+                        {% with product=item.product %}
                         <li>
-                            <a href="#" class="photo"><img src="{% static 'images/img-pro-01.jpg' %}" class="cart-thumb" alt="" /></a>
-                            <h6><a href="#">Delica omtantur </a></h6>
-                            <p>1x - <span class="price">$80.00</span></p>
+                            <a class="photo"><img src="{{product.image.url}}" class="cart-thumb" alt="" /></a>
+                            <h6><a>{{product.name}} </a></h6>
+                            <p>{{item.qty}} - <span class="price">{{item.total_price}}</span></p>
                         </li>
-                        <li>
-                            <a href="#" class="photo"><img src="{% static 'images/img-pro-02.jpg' %}" class="cart-thumb" alt="" /></a>
-                            <h6><a href="#">Omnes ocurreret</a></h6>
-                            <p>1x - <span class="price">$60.00</span></p>
-                        </li>
-                        <li>
-                            <a href="#" class="photo"><img src="{% static 'images/img-pro-03.jpg' %}" class="cart-thumb" alt="" /></a>
-                            <h6><a href="#">Agam facilisis</a></h6>
-                            <p>1x - <span class="price">$40.00</span></p>
-                        </li>
+                        {% endwith %}
+                        {% endfor %}
+
                         <li class="total">
                             <a href="{% url 'cart' %}" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
-                            <span class="float-right"><strong>Total</strong>: $180.00</span>
+                            <span class="float-right"><strong>Total</strong>: {{basket.getCompletePrice}}</span>
                         </li>
                     </ul>
                 </li>

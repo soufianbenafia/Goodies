@@ -83,15 +83,23 @@ class Basket():
 
 
     def getTaxPrice(self):
-        subTotal = self.getCompletePrice();
+        subTotal = self.getCompletePrice()
         tax = round((subTotal/100)*7, 2)
         return tax
 
+    def getShippingCosts(self):
+        subTotalTax = self.getCompletePrice() + self.getTaxPrice()
+        amountFixedShip = 30
+        if subTotalTax < amountFixedShip:
+            return 4.99
+        else:
+            return 30
+
+    def getGrandTotal(self):
+        return self.getCompletePrice() + self.getTaxPrice() + self.getShippingCosts()
+
+    
     def getBasketFully(self):
-        """
-        Collect the product_id in the session data to query the database
-        and return products
-        """
         product_ids = self.basket.keys()
         products = Product.products.filter(id__in=product_ids)
         basket = self.basket.copy()
@@ -101,14 +109,11 @@ class Basket():
             basket[str(product.id)]['image'] = product.image.url
             basket[str(product.id)]['price'] = product.price
 
-
-
         for item in basket.values():
             item['price'] = str(item['price'])
             totalPrice = Decimal(item['price']) * Decimal(item['qty'])
             item['total_price'] = str(totalPrice)
         
-
         return basket
 
 

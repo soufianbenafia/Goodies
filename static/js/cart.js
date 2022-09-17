@@ -47,9 +47,20 @@
                         }
                     });
                 });
-                console.log("subtotal: " + calculateSubTotal(json))
+                var subTotal = calculateSubTotal(json)
+                var tax = calculateTax(json)
+                var ship = getShippingCosts(subTotal, tax)
+                var grandTotal = parseFloat(parseFloat(subTotal) + parseFloat(ship) + parseFloat(tax)).toFixed(2)
 
-                $('.sub-total-update').text("€ " + calculateSubTotal(json));
+                console.log("subTotal: " + subTotal)
+                console.log("tax: " + tax)
+                console.log("ship: " + ship)
+                console.log("grandTotal: " + grandTotal)
+
+                $('.sub-total-update').text("€ " + subTotal);
+                $('.tax-update').text("€ " + tax);
+                $('.ship-update').text("€ " + ship);
+                $('.grandTotal-update').text("€ " + grandTotal);
                 document.getElementById("basket-qty").innerHTML = calculateQtySum(json);
                 generateCartSide(json)
             },
@@ -121,6 +132,21 @@
         });
     })
 
+
+    function getShippingCosts(subtotal, tax) {
+        var subTotalTax = parseFloat(subtotal + tax).toFixed(2)
+        var amountFixedShip = 30
+        if (subTotalTax < amountFixedShip) {
+            return 4.99
+        } else {
+            return 30
+        }
+    }
+
+    function calculateTax(json) {
+        var subTotal = calculateSubTotal(json)
+        return parseFloat((subTotal / 100) * 7).toFixed(2);
+    }
 
     function calculateSubTotal(json) {
         var total = 0;
