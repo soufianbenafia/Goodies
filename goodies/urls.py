@@ -13,6 +13,8 @@ urlpatterns = [
     path('add/',views.cart_add,name='cart_add'),
     path('update/',views.cart_update,name='cart_update'),
     path('delete/',views.cart_delete,name='cart_delete'),
-    path('register.html/',views.account_register,name='register')
+    path('register.html/',views.account_register,name='register'),
+    path('activate/<slug:uidb64>/<slug:token>/', views.account_activate, name='activate'),
+
 
 ]

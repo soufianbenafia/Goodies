@@ -4,15 +4,14 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from goodies.basket import Basket
 from django.http import JsonResponse
-from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes
+from django.utils.encoding import force_bytes,force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from goodies.forms import RegistrationForm
-from goodies.models import Category, Product, ProductDetailImage
-from .tokens import account_activation_token
+from goodies.models import Category, Product, ProductDetailImage, UserBase
+from goodies.tokens import account_activation_token
 
 import json
 
@@ -132,3 +131,18 @@ def account_register(request):
     else:
         registerForm = RegistrationForm()
         return render(request, 'goodies/register.html', {'form': registerForm})
+
+
+def account_activate(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = UserBase.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, user.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return redirect('/my-account.html/')
+    else:
+        return render(request, 'goodies/activation_invalid.html')

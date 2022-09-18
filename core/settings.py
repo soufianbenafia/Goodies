@@ -143,3 +143,6 @@ DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = True
 AUTH_USER_MODEL = 'goodies.UserBase'
 LOGIN_REDIRECT_URL = '/goodies/dashboard'
 LOGIN_URL = '/goodies/login/'
+
+# Email setting
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
