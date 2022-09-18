@@ -38,7 +38,7 @@
 
 
 <body>
-    <!-- Start Main Top -->
+   <!-- Start Main Top -->
     <div class="main-top">
         <div class="container-fluid">
             <div class="row">
@@ -55,18 +55,17 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-					<div class="login-box">
-						<select id="basic" class="selectpicker show-tick form-control" data-placeholder="Sign In">
-							<option>Register Here</option>
-							<option>Sign In</option>
-						</select>
-					</div>
+                    <div class="login-box">
+                        <select id="basic" class="selectpicker show-tick form-control dataChanger" title="Sign in/Register">
+                            <option value="{% url 'register' %}">Register Here</option>
+                            <option value="{% url 'account' %}">Sign In</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- End Main Top -->
-
+<!-- End Main Top -->
     <!-- Start Main Top -->
     <header class="main-header">
         <!-- Start Navigation -->
@@ -489,6 +488,8 @@
     <script src="{% static 'js/form-validator.min.js'%}"></script>
     <script src="{% static 'js/contact-form-script.js'%}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
+    <script src="{% static 'js/register.js' %}"></script>
+
 </body>
 
 </html>
