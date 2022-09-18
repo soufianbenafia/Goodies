@@ -64,6 +64,9 @@ def account(request):
     context = {}
     return render(request, 'goodies/my-account.html', context)
 
+def confirm(request):
+    context = {}
+    return render(request, 'goodies/activation_valid.html', context)
 
 def cart_add(request):
     basket = Basket(request)
@@ -127,7 +130,8 @@ def account_register(request):
                 'token': account_activation_token.make_token(user),
             })
             user.email_user(subject=subject, message=message)
-            return HttpResponse('registered succesfully and activation sent')
+            return render(request, 'goodies/activation_valid.html', {'email': user.email})
+            # return HttpResponse('registered succesfully and activation sent')
     else:
         registerForm = RegistrationForm()
         return render(request, 'goodies/register.html', {'form': registerForm})

@@ -15,6 +15,7 @@ urlpatterns = [
     path('delete/',views.cart_delete,name='cart_delete'),
     path('register.html/',views.account_register,name='register'),
     path('activate/<slug:uidb64>/<slug:token>/', views.account_activate, name='activate'),
-
+    path('register.html/',views.confirm,name='confirm'),
+    path('activation_valid.html/',views.confirm,name="confirm"),
 
 ]
