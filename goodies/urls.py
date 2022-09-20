@@ -1,5 +1,7 @@
 from django.urls import path
 from .import views
+from django.contrib.auth import views as auth_views
+from .forms import (UserLoginForm)
 
 urlpatterns = [
     path('',views.home,name="home"),
@@ -17,5 +19,8 @@ urlpatterns = [
     path('activate/<slug:uidb64>/<slug:token>/', views.account_activate, name='activate'),
     path('register.html/',views.confirm,name='confirm'),
     path('activation_valid.html/',views.confirm,name="confirm"),
+    path('login/', auth_views.LoginView.as_view(template_name='goodies/login.html',
+                                                form_class=UserLoginForm), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='/login/'), name='logout'),
 
 ]

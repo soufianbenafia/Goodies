@@ -28,8 +28,8 @@
         <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
         <!-- Custom CSS -->
         <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
-        <script src="https://kit.fontawesome.com/813d80f876.js" crossorigin="anonymous"></script>
     </head>
+
 
     <body>
           <!-- Start Main Top -->
@@ -58,7 +58,6 @@
               </div>
           </div>
           <!-- End Main Top -->
-        <!-- End Main Top -->
         <!-- Start Main Top -->
         <header class="main-header">
             <!-- Start Navigation -->
@@ -100,17 +99,17 @@
                             <li class="search">
                                 <a href="#"><i class="fa fa-search"></i></a>
                             </li>
-                            <li class="side-menu">
-                                <a href="#">
-                                    <i class="fa fa-shopping-bag"></i>
-                                    {% with total_qty=basket|length %}
-                                    <span id="basket-qty" class="badge">
-                                        {% if total_qty > 0 %} {{ total_qty }} {% else %} 0 {%endif%}
-                  </span>
-                                        {% endwith %}
-                                        <p>My Cart</p>
-                                </a>
-                            </li>
+                           <li class="side-menu">
+                               <a href="#">
+                                   <i class="fa fa-shopping-bag"></i>
+                                   {% with total_qty=basket|length %}
+                                   <span id="basket-qty" class="badge">
+                                       {% if total_qty > 0 %} {{ total_qty }} {% else %} 0 {% endif%}
+                                    </span>
+                                       {% endwith %}
+                                       <p>My Cart</p>
+                               </a>
+                           </li>
                         </ul>
                     </div>
                     <!-- End Atribute Navigation -->
@@ -153,32 +152,145 @@
                 </div>
             </div>
         </div>
-        <!-- End Top Search 
-        - Impressum. Handelsregister
-        - Geschäfts und Vertragsbedingungen
-        -->
+        <!-- End Top Search -->
+        <style>
+            .account-form input {
+                border: 2px solid #ccc;
+                height: calc(2em + 0.75rem + 2px);
+            }
 
+            .account-form input:focus {
+                border-color: #1497ff;
+                box-shadow: none;
+            }
+        </style>
 
-        <div style="background: #f5f5f5;padding-bottom:100px;padding-top:100px">
-            <div class="row bootstrap snippets bootdeys">
-                <div class="col-md-12 col-md-offset-3">
-                    <div class="m-t-30 card-box ">
-                        <div class="text-center">
-                            <h4 class="text-uppercase font-bold m-b-0">Success !!</h4>
-                        </div>
-                        <div class="panel-body text-center">
-                         <i class="fa-solid fa-circle-check fa-9x"></i>
-                            <p class="text-muted font-13 m-t-20" style="color: #9a9da0">
-                                Registered succesfully and activation link
-                                has been send to <b> {{ email }}</b>. Please check for the activation email
-                                and click on it to activate your Account.
-                            </p>
+        <div class="container-fluid">
+            <div class="row no-gutter">
+                <div class="col-md-12">
+                    <div class="login d-flex align-items-center py-5">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12 col-lg-6  mx-auto">
+                                    <form class="account-form p-4 rounded" action="{% url 'login' %}" method="post">
+
+                                        {% csrf_token %}
+                                        <h3 class="mb-4">Sign In</h3>
+
+                                        {% if form.errors %}
+                                        <div class="alert alert-primary" role="alert">
+                                            Error: Username or Password not correct!
+                                        </div>
+                                        {% endif %}
+
+                                        <label class="form-label">{{ form.username.label}}</label>
+                                            {{ form.username}}
+
+                                            <label class="form-label">{{ form.password.label}}</label>
+                                                {{ form.password}}
+                                                <div class="d-grid gap-2">
+                                                    <input type="hidden" name="next" value="{{ next }}">
+                                                    <button class="btn btn-primary py-2 mb-4 mt-5 fw-bold" type="submit"
+                                                        value="Log-in">Sign in
+                                                    </button>
+                                                </div>
+                                                <p class="text-center pb-3">
+                                                    <a href="{% url "register" %}">Create an account</a>
+                                                </p>
+                                    </form>
+                                    <p class="small text-center pt-4">
+                                        {% comment %} <a href="{% url "password_reset" %}">Forgotten Password?</a>
+                                        {% endcomment %}
+                                    </p>
+                                    <p class="small text-center">
+                                        {% comment %} <a href="{% url "accounts:register" %}">Help Center?</a>
+                                        {% endcomment %}
+                                    </p>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Start Footer  -->
+        <footer>
+            <div class="footer-main">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-12 col-sm-12">
+                            <div class="footer-top-box">
+                                <h3>Business Time</h3>
+                                <ul class="list-time">
+                                    <li>Monday - Friday: 08.00am to 05.00pm</li>
+                                    <li>Saturday: 10.00am to 08.00pm</li>
+                                    <li>Sunday: <span>Closed</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-sm-12">
+                            <div class="footer-top-box">
+                                <h3>Social Media</h3>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                <ul>
+                                    <li>
+                                        <a href="#"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fab fa-google-plus" aria-hidden="true"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fa fa-rss" aria-hidden="true"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fab fa-pinterest-p" aria-hidden="true"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-sm-12">
+                            <div class="footer-link-contact">
+                                <h4>Contact Us</h4>
+                                <ul>
+                                    <li>
+                                        <p>
+                                            <i class="fas fa-map-marker-alt"></i>Address: Michael I.
+                                            Days 3756 <br />Preston Street Wichita,<br />
+                                            KS 67213
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <i class="fas fa-phone-square"></i>Phone:
+                                            <a href="tel:+1-888705770">+1-888 705 770</a>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p>
+                                            <i class="fas fa-envelope"></i>Email:
+                                            <a href="mailto:contactinfo@gmail.com">contactinfo@gmail.com</a>
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+        </footer>
+        <!-- End Footer  -->
         <a href="#" id="back-to-top" title="Back to top" style="display: none">&uarr;</a>
 
         <!-- ALL JS FILES -->

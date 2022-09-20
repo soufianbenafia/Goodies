@@ -141,7 +141,7 @@ DJANGORESIZED_DEFAULT_NORMALIZE_ROTATION = True
 
 # Custom user model
 AUTH_USER_MODEL = 'goodies.UserBase'
-LOGIN_REDIRECT_URL = '/goodies/dashboard'
+LOGIN_REDIRECT_URL = '/my-account.html/'
 LOGIN_URL = '/goodies/login/'
 
 # Email setting
