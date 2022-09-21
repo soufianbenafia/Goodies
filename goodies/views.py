@@ -4,7 +4,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from goodies.basket import Basket
 from django.http import JsonResponse
-from django.contrib.auth import login
+from django.contrib.auth import login,logout
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes,force_str
@@ -158,6 +158,13 @@ def account_activate(request, uidb64, token):
     else:
         return render(request, 'goodies/activation_invalid.html')
 
+@login_required
+def delete_user(request):
+    user = UserBase.objects.get(user_name=request.user)
+    user.is_active = False
+    user.save()
+    logout(request)
+    return render(request,'goodies/delete_confirmation.html')
 
 @login_required
 def edit_details(request):
