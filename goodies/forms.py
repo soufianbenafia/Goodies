@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import (AuthenticationForm, PasswordResetForm,
                                        SetPasswordForm)
 from goodies.models import UserBase
+from django_countries.fields import CountryField
+from django_countries.widgets import CountrySelectWidget
 
 class UserLoginForm(AuthenticationForm):
 
@@ -84,3 +86,35 @@ class UserEditForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['user_name'].required = True
         self.fields['email'].required = True
+
+
+
+class AddressEditForm(forms.ModelForm):
+
+    country = CountryField(max_length=200).formfield(
+        widget=CountrySelectWidget(
+           attrs={'class': 'form-control mb-3', 'placeholder': 'select country', 'id': 'form-country'}
+        )
+    )
+    address_line_1 = forms.CharField(
+        label='Address line 1', min_length=4, max_length=50, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'Address line 1', 'id': 'form-address_line_1'}))
+
+    address_line_2 = forms.CharField(
+        label='Address line 2', min_length=4, max_length=50, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'Address line 2', 'id': 'form-address_line_2'}))
+    
+    town_city = forms.CharField(
+        label='Town city', min_length=4, max_length=50, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'Town city', 'id': 'form-town_city'}))
+
+    postcode = forms.CharField(
+        label='Postcode', min_length=4, max_length=50, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'Postcode', 'id': 'form-postcode'}))
+
+    class Meta:
+        model = UserBase
+        fields = ('country', 'address_line_1', 'address_line_2','town_city','postcode')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

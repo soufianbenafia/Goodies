@@ -137,3 +137,5 @@ LOGIN_URL = '/goodies/login/'
 
 # Email setting
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+COUNTRIES_FLAG_URL = 'flags/{code}_16.png'

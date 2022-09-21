@@ -9,7 +9,7 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes,force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from goodies.forms import RegistrationForm, UserEditForm
+from goodies.forms import RegistrationForm, UserEditForm,AddressEditForm
 from goodies.models import Category, Product, ProductDetailImage, UserBase
 from goodies.tokens import account_activation_token
 from django.contrib.auth.decorators import login_required
@@ -172,3 +172,15 @@ def edit_details(request):
     return render(request,
                   'goodies/edit_details.html', {'user_form': user_form})
 
+@login_required
+def edit_addresses(request):
+    if request.method == 'POST':
+        address_form = AddressEditForm(instance=request.user, data=request.POST)
+
+        if address_form.is_valid():
+            address_form.save()
+    else:
+        address_form = AddressEditForm(instance=request.user)
+
+    return render(request,
+                  'goodies/edit_addresses.html', {'address_form': address_form})
