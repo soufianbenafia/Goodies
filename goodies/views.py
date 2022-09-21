@@ -9,9 +9,11 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes,force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from goodies.forms import RegistrationForm
+from goodies.forms import RegistrationForm, UserEditForm
 from goodies.models import Category, Product, ProductDetailImage, UserBase
 from goodies.tokens import account_activation_token
+from django.contrib.auth.decorators import login_required
+
 
 import json
 
@@ -61,9 +63,14 @@ def checkout(request):
 
 
 def account(request):
-    context = {}
-    return render(request, 'goodies/my-account.html', context)
+     if request.user.is_authenticated:
+        context = {}
+        return render(request, 'goodies/my-account.html', context)
+     else:
+        registerForm = RegistrationForm()
+        return render(request, 'goodies/register.html', {'form': registerForm})
 
+    
 def confirm(request):
     context = {}
     return render(request, 'goodies/activation_valid.html', context)
@@ -150,3 +157,18 @@ def account_activate(request, uidb64, token):
         return redirect('/my-account.html/')
     else:
         return render(request, 'goodies/activation_invalid.html')
+
+
+@login_required
+def edit_details(request):
+    if request.method == 'POST':
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+
+        if user_form.is_valid():
+            user_form.save()
+    else:
+        user_form = UserEditForm(instance=request.user)
+
+    return render(request,
+                  'goodies/edit_details.html', {'user_form': user_form})
+
