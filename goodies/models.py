@@ -1,6 +1,5 @@
 from django.urls import reverse
 from django.db import models
-from django_resized import ResizedImageField
 from django_extensions.db.fields import AutoSlugField
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
@@ -96,7 +95,7 @@ class Product(models.Model):
     availability = models.IntegerField(default=10)
     discription = models.TextField(blank=True, null=True)
     slug = models.SlugField()
-    image = ResizedImageField(size=[370, 350])
+    image = models.ImageField()
     objects = models.Manager()
     products = ProductManager()
 
