@@ -162,9 +162,10 @@ def account_activate(request, uidb64, token):
 def delete_user(request):
     user = UserBase.objects.get(user_name=request.user)
     user.is_active = False
+    email = user.email
     user.save()
     logout(request)
-    return render(request,'goodies/delete_confirmation.html')
+    return render(request,'goodies/delete_confirmation.html',{'email':email})
 
 @login_required
 def edit_details(request):
