@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes,force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from goodies.forms import RegistrationForm, UserEditForm,AddressEditForm
-from goodies.models import Category, Product, ProductDetailImage, UserBase
+from goodies.models import Category, DeliveryOptions, Product, ProductDetailImage, Customer
 from goodies.tokens import account_activation_token
 from django.contrib.auth.decorators import login_required
 
@@ -147,7 +147,7 @@ def account_register(request):
 def account_activate(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
-        user = UserBase.objects.get(pk=uid)
+        user = Customer.objects.get(pk=uid)
     except(TypeError, ValueError, OverflowError, user.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
@@ -160,7 +160,7 @@ def account_activate(request, uidb64, token):
 
 @login_required
 def delete_user(request):
-    user = UserBase.objects.get(user_name=request.user)
+    user = Customer.objects.get(user_name=request.user)
     user.is_active = False
     email = user.email
     user.save()
@@ -192,3 +192,31 @@ def edit_addresses(request):
 
     return render(request,
                   'goodies/edit_addresses.html', {'address_form': address_form})
+
+
+@login_required
+def deliverychoices(request):
+    deliveryoptions = DeliveryOptions.objects.filter(is_active=True)
+    return render(request, "goodies/delivery_choices.html", {"deliveryoptions": deliveryoptions})
+
+
+@login_required
+def basket_update_delivery(request):
+    basket = Basket(request)
+    if request.POST.get("action") == "post":
+        delivery_option = int(request.POST.get("deliveryoption"))
+        delivery_type = DeliveryOptions.objects.get(id=delivery_option)
+        updated_total_price = basket.basket_update_delivery(
+            delivery_type.delivery_price)
+
+        session = request.session
+        if "purchase" not in request.session:
+            session["purchase"] = {
+                "delivery_id": delivery_type.id,
+            }
+        else:
+            session["purchase"]["delivery_id"] = delivery_type.id
+            session.modified = True
+
+        response = JsonResponse({"total": updated_total_price, "delivery_price": basket.getShippingCosts(delivery_type.delivery_price)})
+        return response

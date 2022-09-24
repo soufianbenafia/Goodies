@@ -1,7 +1,7 @@
 
 
 from decimal import Decimal
-from goodies.models import Product
+from goodies.models import DeliveryOptions, Product
 
 
 class Basket():
@@ -88,15 +88,24 @@ class Basket():
         return tax
 
     def getShippingCosts(self):
+        deliveryprice = 0.00
+
+        if "purchase" in self.session:
+            deliveryprice = DeliveryOptions.objects.get(id=self.session["purchase"]["delivery_id"]).delivery_price
+
+
         subTotalTax = self.getCompletePrice() + self.getTaxPrice()
-        amountFixedShip = 30
-        if subTotalTax < amountFixedShip:
-            return 4.99
+        amountFree  = 49
+        if subTotalTax < amountFree:
+            return deliveryprice
         else:
-            return 30
+            return 0
 
     def getGrandTotal(self):
         return self.getCompletePrice() + self.getTaxPrice() + self.getShippingCosts()
+
+    def getSubTotalWithTax(self):
+        return self.getCompletePrice() + self.getTaxPrice()
 
     
     def getBasketFully(self):
@@ -116,5 +125,9 @@ class Basket():
         
         return basket
 
+
+    def basket_update_delivery(self, deliveryprice=0):
+        total = self.getSubTotalWithTax() + Decimal(deliveryprice)
+        return total
 
 

@@ -34,6 +34,14 @@ urlpatterns = [
     path('password_reset_confirm/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name='goodies/password_reset_confirm.html',
                                                                                                 success_url='/password_reset_complete/',
                                                                                                 form_class=PwdResetConfirmForm), name="password_reset_confirm"),
-    path('password_reset/password_reset_email_confirm/', TemplateView.as_view(template_name="goodies/reset_status.html"), name='password_reset_done'),
-    path('password_reset_complete/', TemplateView.as_view(template_name="goodies/reset_status.html"), name='password_reset_complete'),
+    path('password_reset/password_reset_email_confirm/', TemplateView.as_view(
+        template_name="goodies/reset_status.html"), name='password_reset_done'),
+    path('password_reset_complete/', TemplateView.as_view(
+        template_name="goodies/reset_status.html"), name='password_reset_complete'),
+    path("deliverychoices", views.deliverychoices, name="deliverychoices"),
+    path("basket_update_delivery", views.basket_update_delivery,name="basket_update_delivery"),
+    # path("delivery_address/", views.delivery_address, name="delivery_address"),
+    # path("payment_selection/", views.payment_selection, name="payment_selection"),
+    # path("payment_complete/", views.payment_complete, name="payment_complete"),
+    # path("payment_successful/", views.payment_successful,name="payment_successful"),
 ]

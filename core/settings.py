@@ -131,7 +131,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom user model
-AUTH_USER_MODEL = 'goodies.UserBase'
+AUTH_USER_MODEL = 'goodies.Customer'
 LOGIN_REDIRECT_URL = '/my-account.html/'
 LOGIN_URL = '/goodies/login/'
 
