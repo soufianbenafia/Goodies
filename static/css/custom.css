@@ -6,21 +6,14 @@
 
 @media (min-width: 1000px) {
     .container {
-        max-width: 1000px;
+        max-width: 940px;
     }
 }
 
-@media (max-width: 1200px) {
-    .container {
-        max-width: 100%;
-        padding: 0 24px;
-    }
-}
-
-@media only screen and (min-width: 600px) and (max-width: 1080px) {
-    #addressCluster {
+@media only screen and (min-width: 300px) and (max-width: 1080px) {
+    /* #addressCluster {
         -ms-flex: 0 0 50%;
         flex: 0 0 50%;
         max-width: 50%
-    }
+    } */
 }
