@@ -4,15 +4,17 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from goodies.basket import Basket
 from django.http import JsonResponse
-from django.contrib.auth import login,logout
-from django.http import HttpResponse
+from django.contrib.auth import login, logout
 from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes,force_str
+from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from goodies.forms import RegistrationForm, UserEditForm,AddressEditForm
-from goodies.models import Category, DeliveryOptions, Product, ProductDetailImage, Customer
+from goodies.forms import RegistrationForm, UserEditForm, AddressEditForm,UserAddressForm
+from goodies.models import Address, Category, DeliveryOptions, Product, ProductDetailImage, Customer
 from goodies.tokens import account_activation_token
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+
 
 
 import json
@@ -63,17 +65,18 @@ def checkout(request):
 
 
 def account(request):
-     if request.user.is_authenticated:
+    if request.user.is_authenticated:
         context = {}
         return render(request, 'goodies/my-account.html', context)
-     else:
+    else:
         registerForm = RegistrationForm()
         return render(request, 'goodies/register.html', {'form': registerForm})
 
-    
+
 def confirm(request):
     context = {}
     return render(request, 'goodies/activation_valid.html', context)
+
 
 def cart_add(request):
     basket = Basket(request)
@@ -148,7 +151,7 @@ def account_activate(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = Customer.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, user.DoesNotExist):
+    except (TypeError, ValueError, OverflowError, user.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
@@ -158,6 +161,7 @@ def account_activate(request, uidb64, token):
     else:
         return render(request, 'goodies/activation_invalid.html')
 
+
 @login_required
 def delete_user(request):
     user = Customer.objects.get(user_name=request.user)
@@ -165,7 +169,8 @@ def delete_user(request):
     email = user.email
     user.save()
     logout(request)
-    return render(request,'goodies/delete_confirmation.html',{'email':email})
+    return render(request, 'goodies/delete_confirmation.html', {'email': email})
+
 
 @login_required
 def edit_details(request):
@@ -180,10 +185,12 @@ def edit_details(request):
     return render(request,
                   'goodies/edit_details.html', {'user_form': user_form})
 
+
 @login_required
 def edit_addresses(request):
     if request.method == 'POST':
-        address_form = AddressEditForm(instance=request.user, data=request.POST)
+        address_form = AddressEditForm(
+            instance=request.user, data=request.POST)
 
         if address_form.is_valid():
             address_form.save()
@@ -218,5 +225,59 @@ def basket_update_delivery(request):
             session["purchase"]["delivery_id"] = delivery_type.id
             session.modified = True
 
-        response = JsonResponse({"total": updated_total_price, "delivery_price": basket.getShippingCosts(delivery_type.delivery_price)})
+        response = JsonResponse({"total": updated_total_price, "delivery_price": basket.getShippingCosts(
+            delivery_type.delivery_price)})
         return response
+
+
+@login_required
+def add_address(request):
+    if request.method == "POST":
+        address_form = UserAddressForm(data=request.POST)
+        if address_form.is_valid():
+            address_form = address_form.save(commit=False)
+            address_form.customer = request.user
+            address_form.save()
+            return HttpResponseRedirect(reverse("addresses"))
+    else:
+        address_form = UserAddressForm()
+    return render(request, "goodies/edit_addresses.html", {"form": address_form})
+
+@login_required
+def view_address(request):
+    addresses = Address.objects.filter(customer=request.user)
+    return render(request, "goodies/addresses.html", {"addresses": addresses})
+
+
+# @login_required
+# def edit_address(request, id):
+#     if request.method == "POST":
+#         address = Address.objects.get(pk=id, customer=request.user)
+#         address_form = UserAddressForm(instance=address, data=request.POST)
+#         if address_form.is_valid():
+#             address_form.save()
+#             return HttpResponseRedirect(reverse("account:addresses"))
+#     else:
+#         address = Address.objects.get(pk=id, customer=request.user)
+#         address_form = UserAddressForm(instance=address)
+#     return render(request, "account/dashboard/edit_addresses.html", {"form": address_form})
+
+
+# @login_required
+# def delete_address(request, id):
+#     address = Address.objects.filter(pk=id, customer=request.user).delete()
+#     return redirect("account:addresses")
+
+
+# @login_required
+# def set_default(request, id):
+#     Address.objects.filter(customer=request.user,
+#                            default=True).update(default=False)
+#     Address.objects.filter(pk=id, customer=request.user).update(default=True)
+
+#     previous_url = request.META.get("HTTP_REFERER")
+
+#     if "delivery_address" in previous_url:
+#         return redirect("checkout:delivery_address")
+
+#     return redirect("account:addresses")
