@@ -121,29 +121,29 @@
                     </div>
                     <!-- End Atribute Navigation -->
                 </div>
-                <!-- Start Side Menu -->
-                <div class="side">
-                    <a href="#" class="close-side"><i class="fa fa-times"></i></a>
-                    <li class="cart-box">
-                        <ul class="cart-list">
-                            {% for item in basket %}
-                            {% with product=item.product %}
-                            <li>
-                                <a class="photo"><img src="{{product.image.url}}" class="cart-thumb" alt="" /></a>
-                                <h6><a>{{product.name}} </a></h6>
-                                <p>{{item.qty}} - <span class="price">{{item.total_price}}</span></p>
-                            </li>
-                            {% endwith %}
-                            {% endfor %}
+             <!-- Start Side Menu -->
+             <div class="side">
+                 <a href="#" class="close-side"><i class="fa fa-times"></i></a>
+                 <li class="cart-box">
+                     <ul class="cart-list">
+                         {% for item in basket %} {% with product=item.product %}
+                         <li>
+                             <a class="photo"><img src="{{product.image}}" class="cart-thumb" alt="" /></a>
+                             <h6><a>{{product.name}} </a></h6>
+                             <p>
+                                 {{item.qty}} - <span class="price">{{item.total_price}}</span>
+                             </p>
+                         </li>
+                         {% endwith %} {% endfor %}
 
-                            <li class="total">
-                                <a href="{% url 'cart' %}" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
-                                <span class="float-right"><strong>Sub Total</strong>: {{basket.getCompletePrice}}</span>
-                            </li>
-                        </ul>
-                    </li>
-                </div>
-                <!-- End Side Menu -->
+                         <li class="total">
+                             <a href="{% url 'cart' %}" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
+                             <span class="float-right"><strong>Total</strong>: {{basket.getCompletePrice}}</span>
+                         </li>
+                     </ul>
+                 </li>
+             </div>
+             <!-- End Side Menu -->
             </nav>
             <!-- End Navigation -->
         </header>

@@ -14,7 +14,7 @@ from goodies.tokens import account_activation_token
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-
+from django.contrib import messages
 
 
 import json
@@ -182,8 +182,8 @@ def edit_details(request):
     else:
         user_form = UserEditForm(instance=request.user)
 
-    return render(request,
-                  'goodies/edit_details.html', {'user_form': user_form})
+    print(user_form.errors)
+    return render(request,'goodies/edit_details.html', {'user_form': user_form})
 
 
 @login_required
@@ -208,6 +208,25 @@ def deliverychoices(request):
 
 
 @login_required
+def delivery_address(request):
+
+    session = request.session
+    if "purchase" not in request.session:
+        messages.success(request, "Please select delivery option")
+        return HttpResponseRedirect(request.META["HTTP_REFERER"])
+
+    addresses = Address.objects.filter(
+        customer=request.user).order_by("-default")
+
+    if "address" not in request.session:
+        session["address"] = {"address_id": str(addresses[0].id)}
+    else:
+        session["address"]["address_id"] = str(addresses[0].id)
+        session.modified = True
+
+    return render(request, "goodies/delivery_address.html", {"addresses": addresses})
+
+@login_required
 def basket_update_delivery(request):
     basket = Basket(request)
     if request.POST.get("action") == "post":
@@ -225,8 +244,7 @@ def basket_update_delivery(request):
             session["purchase"]["delivery_id"] = delivery_type.id
             session.modified = True
 
-        response = JsonResponse({"total": updated_total_price, "delivery_price": basket.getShippingCosts(
-            delivery_type.delivery_price)})
+        response = JsonResponse({"total": updated_total_price, "delivery_price": basket.getShippingCosts(delivery_type.delivery_price)})
         return response
 
 
@@ -249,35 +267,29 @@ def view_address(request):
     return render(request, "goodies/addresses.html", {"addresses": addresses})
 
 
-# @login_required
-# def edit_address(request, id):
-#     if request.method == "POST":
-#         address = Address.objects.get(pk=id, customer=request.user)
-#         address_form = UserAddressForm(instance=address, data=request.POST)
-#         if address_form.is_valid():
-#             address_form.save()
-#             return HttpResponseRedirect(reverse("account:addresses"))
-#     else:
-#         address = Address.objects.get(pk=id, customer=request.user)
-#         address_form = UserAddressForm(instance=address)
-#     return render(request, "account/dashboard/edit_addresses.html", {"form": address_form})
+@login_required
+def edit_address(request, id):
+    if request.method == "POST":
+        address = Address.objects.get(pk=id, customer=request.user)
+        address_form = UserAddressForm(instance=address, data=request.POST)
+        if address_form.is_valid():
+            address_form.save()
+            return HttpResponseRedirect(reverse("addresses"))
+    else:
+        address = Address.objects.get(pk=id, customer=request.user)
+        address_form = UserAddressForm(instance=address)
+    return render(request, "goodies/edit_addresses.html", {"form": address_form})
 
 
-# @login_required
-# def delete_address(request, id):
-#     address = Address.objects.filter(pk=id, customer=request.user).delete()
-#     return redirect("account:addresses")
+@login_required
+def delete_address(request, id):
+    address = Address.objects.filter(pk=id, customer=request.user).delete()
+    return redirect("addresses")
 
 
-# @login_required
-# def set_default(request, id):
-#     Address.objects.filter(customer=request.user,
-#                            default=True).update(default=False)
-#     Address.objects.filter(pk=id, customer=request.user).update(default=True)
-
-#     previous_url = request.META.get("HTTP_REFERER")
-
-#     if "delivery_address" in previous_url:
-#         return redirect("checkout:delivery_address")
-
-#     return redirect("account:addresses")
+@login_required
+def set_default(request, id):
+    Address.objects.filter(customer=request.user,
+                           default=True).update(default=False)
+    Address.objects.filter(pk=id, customer=request.user).update(default=True)
+    return redirect("addresses")

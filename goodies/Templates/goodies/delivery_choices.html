@@ -114,29 +114,29 @@
                     </div>
                     <!-- End Atribute Navigation -->
                 </div>
-                <!-- Start Side Menu -->
-                <div class="side">
-                    <a href="#" class="close-side"><i class="fa fa-times"></i></a>
-                    <li class="cart-box">
-                        <ul class="cart-list">
-                            {% for item in basket %} {% with product=item.product %}
-                            <li>
-                                <a class="photo"><img src="{{product.image.url}}" class="cart-thumb" alt="" /></a>
-                                <h6><a>{{product.name}} </a></h6>
-                                <p>
-                                    {{item.qty}} - <span class="price">{{item.total_price}}</span>
-                                </p>
-                            </li>
-                            {% endwith %} {% endfor %}
+               <!-- Start Side Menu -->
+               <div class="side">
+                   <a href="#" class="close-side"><i class="fa fa-times"></i></a>
+                   <li class="cart-box">
+                       <ul class="cart-list">
+                           {% for item in basket %} {% with product=item.product %}
+                           <li>
+                               <a class="photo"><img src="{{product.image}}" class="cart-thumb" alt="" /></a>
+                               <h6><a>{{product.name}} </a></h6>
+                               <p>
+                                   {{item.qty}} - <span class="price">{{item.total_price}}</span>
+                               </p>
+                           </li>
+                           {% endwith %} {% endfor %}
 
-                            <li class="total">
-                                <a href="{% url 'cart' %}" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
-                                <span class="float-right"><strong>Total</strong>: {{basket.getCompletePrice}}</span>
-                            </li>
-                        </ul>
-                    </li>
-                </div>
-                <!-- End Side Menu -->
+                           <li class="total">
+                               <a href="{% url 'cart' %}" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
+                               <span class="float-right"><strong>Total</strong>: {{basket.getCompletePrice}}</span>
+                           </li>
+                       </ul>
+                   </li>
+               </div>
+               <!-- End Side Menu -->
             </nav>
             <!-- End Navigation -->
         </header>
@@ -153,93 +153,103 @@
             </div>
         </div>
         <!-- End Top Search -->
-       
-         <style>
-             .account-form input {
-                 border: 2px solid #ccc;
-                 height: calc(2em + 0.75rem + 2px);
-             }
 
-             .account-form input:focus {
-                 border-color: #1497ff;
-                 box-shadow: none;
-             }
-         </style>
+        <style>
+            .account-form input {
+                border: 2px solid #ccc;
+                height: calc(2em + 0.75rem + 2px);
+            }
 
-        <div class="container">
-            <div class="col-12">
-                <h1 class="h2">Delivery Options</h1>
-            </div>
-            <div class="col-12">
-                <p>Select your delivery options</p>
-            </div>
-            <hr />
-        </div>
+            .account-form input:focus {
+                border-color: #1497ff;
+                box-shadow: none;
+            }
+        </style>
+
 
 
         <div class="container">
-            {% if messages %}
-            <div class="alert alert-warning" alert-{{ message.tags }} role="alert">
-                {% for message in messages  %}
-                {{message|safe}}
-                {% endfor %}
-            </div>
-            {% endif %}
-            <div class="row g-3">
-                {% if deliveryoptions|length == 0 %}
-                <div class="col-12">There are no delivery options <a href="{% url 'shop' %}">Shop</a></div>
-                {% else %}
-                <div class="col-md-4 col-lg-4 order-md-last p-0 order-3">
-                    <div class="d-flex bd-highlight ms-0">
-                        <div class="p-2 flex-grow-1 bd-highlight">Sub Total:</div>
-                        <div class="p-2 bd-highlight"><span class="fw-bold h5">€</span><span id="sub_total"
-                                class="fw-bold h5">{{basket.getCompletePrice}}</span></div>
+            <div class="login d-flex align-items-center">
+                <div class="col-12 col-md-12 col-lg-12 mx-auto">
+                    <div class="container">
+                        <div class="col-12">
+                            <h1 class="h2">Delivery Options</h1>
+                        </div>
+                        <div class="col-12">
+                            <p>Select your delivery options</p>
+                        </div>
+                        <hr />
                     </div>
-                     <div class="d-flex bd-highlight ms-0">
-                         <div class="p-2 flex-grow-1 bd-highlight">Tax:</div>
-                         <div class="p-2 bd-highlight"><span class="fw-bold h5">€</span><span id="tax"
-                                 class="fw-bold h5">{{basket.getTaxPrice}}</span></div>
-                     </div>
-                    <div class="d-flex bd-highlight">
-                        <div class="p-2 flex-grow-1 bd-highlight">Delivery Cost:</div>
-                        <div class="p-2 bd-highlight"><span class="fw-bold h5">€</span><span id="delivery_price"
-                                class="fw-bold h5">{{basket.getShippingCosts}}</span></div>
-                    </div>
-                    <div class="d-flex bd-highlight">
-                        <div class="p-2 flex-grow-1 bd-highlight">Total:</div>
-                        <div class="p-2 bd-highlight"><span class="fw-bold h5">€</span><span id="total"
-                                class="fw-bold h5">{{basket.getGrandTotal}}</span></div>
-                    </div>
-                    <a role="button" href="*" class="btn btn-success fw-bold w-100"
-                        type="button">Pay Securely</a>
-                </div>
-                <div class="col-md-7 col-lg-8">
-                    {% for option in deliveryoptions %}
-                    <div class="card mb-3 border-1 rounded-0 product-item me-md-4" data-index="{{option.id}}">
-                        <div class="row g-0">
-                            <div class="col-md-2 ps-3 ps-md-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
-                                    class="bi bi-truck mt-2" viewBox="0 0 16 16">
-                                    <path
-                                        d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
-                                </svg>
-                            </div>
-                            <div class="col-md-9 ps-md-1">
-                                <div class="card-body p-1">
-                                    <p class="card-text ps-2 mb-1 pt-1 fw-bold">{{option.delivery_name}}</p>
-                                    <p class="card-text ps-2 pb-3">Your order should be delivered within
-                                        {{option.delivery_timeframe}}</p>
+                    <div class="container">
+                        {% if messages %}
+                        <div class="alert alert-warning" alert-{{ message.tags }} role="alert">
+                            {% for message in messages  %}
+                            {{message|safe}}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="row g-3">
+                            {% if deliveryoptions|length == 0 %}
+                            <div class="col-12 text-center">There are no delivery options 
+                                <a href="{% url 'shop' %}"><strong>Go to the Shop</strong></a></div>
+                            {% else %}
+                            <div class="col-md-4 col-lg-4 order-md-last p-0 order-3">
+                                <div class="d-flex bd-highlight ms-0">
+                                    <div class="p-2 flex-grow-1 bd-highlight">Sub Total:</div>
+                                    <div class="p-2 bd-highlight"><span class="fw-bold h5">€</span><span id="sub_total"
+                                            class="fw-bold h5">{{basket.getCompletePrice}}</span></div>
                                 </div>
+                                <div class="d-flex bd-highlight ms-0">
+                                    <div class="p-2 flex-grow-1 bd-highlight">Tax:</div>
+                                    <div class="p-2 bd-highlight"><span class="fw-bold h5">€</span><span id="tax"
+                                            class="fw-bold h5">{{basket.getTaxPrice}}</span></div>
+                                </div>
+                                <div class="d-flex bd-highlight">
+                                    <div class="p-2 flex-grow-1 bd-highlight">Delivery Cost:</div>
+                                    <div class="p-2 bd-highlight"><span class="fw-bold h5">€</span><span
+                                            id="delivery_price" class="fw-bold h5">{{basket.getShippingCosts}}</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex bd-highlight">
+                                    <div class="p-2 flex-grow-1 bd-highlight">Total:</div>
+                                    <div class="p-2 bd-highlight"><span class="fw-bold h5">€</span><span id="total"
+                                            class="fw-bold h5">{{basket.getGrandTotal}}</span></div>
+                                </div>
+                                <a role="button" href="{% url "delivery_address" %}"
+                                    class="btn btn-success fw-bold w-100" type="button">Pay
+                                    Securely</a>
                             </div>
-                            <div class="col-md-1 ps-md-1">
-                                <input class="align-middle h-100" type="radio" name="deliveryOption" id="{{option.id}}"
-                                    value="{{option.id}}">
+                            <div class="col-md-7 col-lg-8">
+                                {% for option in deliveryoptions %}
+                                <div class="card mb-3 border-1 rounded-0 product-item me-md-4"
+                                    data-index="{{option.id}}">
+                                    <div class="row g-0">
+                                        <div class="col-md-2 ps-3 ps-md-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+                                                fill="currentColor" class="bi bi-truck mt-2" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                                            </svg>
+                                        </div>
+                                        <div class="col-md-9 ps-md-1">
+                                            <div class="card-body p-1">
+                                                <p class="card-text ps-2 mb-1 pt-1 fw-bold">{{option.delivery_name}}</p>
+                                                <p class="card-text ps-2 pb-3">Your order should be delivered within
+                                                    {{option.delivery_timeframe}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 ps-md-1">
+                                            <input class="align-middle h-100" type="radio" name="deliveryOption"
+                                                id="{{option.id}}" value="{{option.id}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
                             </div>
+                            {% endif %}
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
-                {% endif %}
             </div>
         </div>
 

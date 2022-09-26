@@ -63,28 +63,24 @@ class RegistrationForm(forms.ModelForm):
 class UserEditForm(forms.ModelForm):
 
     email = forms.EmailField(
-        label='Account email', max_length=200, widget=forms.TextInput(
-            attrs={'class': 'form-control mb-3', 'placeholder': 'email', 'id': 'form-email'}),)
+        label='Account email (can not be changed)', max_length=200, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'email', 'id': 'form-email', 'readonly': 'readonly'}))
 
-    user_name = forms.CharField(
-        label='Username (can not be changed)', min_length=4, max_length=50, widget=forms.TextInput(
-            attrs={'class': 'form-control mb-3', 'placeholder': 'Username', 'id': 'form-username', 'readonly': 'readonly'}))
+    name = forms.CharField(
+        label='Name', min_length=4, max_length=50, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'name', 'id': 'form-name', }))
 
-    first_name = forms.CharField(
-        label='Firstname', min_length=4, max_length=50, widget=forms.TextInput(
-            attrs={'class': 'form-control mb-3', 'placeholder': 'Firstname', 'id': 'form-firstname'}), required=False)
-    
-    phone_number = forms.CharField(
-        label='phonenumber', min_length=4, max_length=50, widget=forms.TextInput(
-            attrs={'class': 'form-control mb-3', 'placeholder': 'phonenumber', 'id': 'form-phonenumber'}), required=False)
+    mobile = forms.CharField(
+        label='mobile', min_length=4, max_length=50, widget=forms.TextInput(
+            attrs={'class': 'form-control mb-3', 'placeholder': 'mobile', 'id': 'form-mobile'}))
 
     class Meta:
         model = Customer
-        fields = ('email', 'user_name', 'first_name','phone_number')
+        fields = ('email', 'name', 'mobile',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['user_name'].required = True
+        self.fields['name'].required = True
         self.fields['email'].required = True
 
 
@@ -168,3 +164,5 @@ class UserAddressForm(forms.ModelForm):
         self.fields["postcode"].widget.attrs.update(
             {"class": "form-control mb-2 account-form", "placeholder": "Full Name"}
         )
+
+

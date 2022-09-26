@@ -2,7 +2,15 @@
 
 from decimal import Decimal
 from goodies.models import DeliveryOptions, Product
+from django.core import serializers
+import json
+from rest_framework import serializers
 
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = "__all__"
 
 class Basket():
 
@@ -23,7 +31,7 @@ class Basket():
             calculatedProductQty = product_qty + productQty
             productSession['qty'] = calculatedProductQty
         else:
-            self.basket[product_id] = {'price': int(product.price), 'qty': int(product_qty)}
+            self.basket[product_id] = {'price': int(product.price), 'qty': str(product_qty)}
 
         self.save()
     
@@ -56,6 +64,9 @@ class Basket():
     def get_product(self, product_id):
         return Product.objects.get(id=product_id)
 
+
+    
+
     def __iter__(self):
         """
         Collect the product_id in the session data to query the database
@@ -66,16 +77,19 @@ class Basket():
         basket = self.basket.copy()
 
         for product in products:
-            basket[str(product.id)]['product'] = product
+            basket[str(product.id)]['product'] = ProductSerializer(product).data
+            # basket[str(product.id)]['product'] = json.loads(
+            #     serializers.serialize('json', product.__dict__))[0]
 
         for item in basket.values():
-            item['price'] = Decimal(item['price'])
-            item['total_price'] = item['price'] * item['qty']
+            price = Decimal(item['price'])
+            totalPrice = price * item['qty']
+            item['total_price'] = str(totalPrice)
             yield item
 
 
     def getCompletePrice(self):
-        completePrice = 0;
+        completePrice = 0
         basket = self.basket.copy()
         for item in basket.values():
             completePrice += Decimal(item['total_price'])
@@ -87,7 +101,7 @@ class Basket():
         tax = round((subTotal/100)*7, 2)
         return tax
 
-    def getShippingCosts(self):
+    def getShippingCosts(self,deliveryprice=0):
         deliveryprice = 0.00
 
         if "purchase" in self.session:
@@ -97,7 +111,7 @@ class Basket():
         subTotalTax = self.getCompletePrice() + self.getTaxPrice()
         amountFree  = 49
         if subTotalTax < amountFree:
-            return deliveryprice
+            return Decimal(deliveryprice)
         else:
             return 0
 

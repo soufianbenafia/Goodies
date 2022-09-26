@@ -114,29 +114,29 @@
                     </div>
                     <!-- End Atribute Navigation -->
                 </div>
-               <!-- Start Side Menu -->
-               <div class="side">
-                   <a href="#" class="close-side"><i class="fa fa-times"></i></a>
-                   <li class="cart-box">
-                       <ul class="cart-list">
-                           {% for item in basket %} {% with product=item.product %}
-                           <li>
-                               <a class="photo"><img src="{{product.image}}" class="cart-thumb" alt="" /></a>
-                               <h6><a>{{product.name}} </a></h6>
-                               <p>
-                                   {{item.qty}} - <span class="price">{{item.total_price}}</span>
-                               </p>
-                           </li>
-                           {% endwith %} {% endfor %}
+                <!-- Start Side Menu -->
+                <div class="side">
+                    <a href="#" class="close-side"><i class="fa fa-times"></i></a>
+                    <li class="cart-box">
+                        <ul class="cart-list">
+                            {% for item in basket %} {% with product=item.product %}
+                            <li>
+                                <a class="photo"><img src="{{product.image}}" class="cart-thumb" alt="" /></a>
+                                <h6><a>{{product.name}} </a></h6>
+                                <p>
+                                    {{item.qty}} - <span class="price">{{item.total_price}}</span>
+                                </p>
+                            </li>
+                            {% endwith %} {% endfor %}
 
-                           <li class="total">
-                               <a href="{% url 'cart' %}" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
-                               <span class="float-right"><strong>Total</strong>: {{basket.getCompletePrice}}</span>
-                           </li>
-                       </ul>
-                   </li>
-               </div>
-               <!-- End Side Menu -->
+                            <li class="total">
+                                <a href="{% url 'cart' %}" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
+                                <span class="float-right"><strong>Total</strong>: {{basket.getCompletePrice}}</span>
+                            </li>
+                        </ul>
+                    </li>
+                </div>
+                <!-- End Side Menu -->
             </nav>
             <!-- End Navigation -->
         </header>
@@ -165,47 +165,82 @@
             }
         </style>
 
-        <div class="container-fluid">
-            <div class="row no-gutter">
-                <div class="col-md-12">
-                    <div class="login d-flex align-items-center py-5">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-12 col-lg-6  mx-auto">
-                                    <form class="account-form p-4 rounded" action="{% url 'login' %}" method="post">
+        <div class="container">
+            <div class="col-12">
+                <h1 class="h2">Delivery Address</h1>
+            </div>
+            <div class="col-12">
+                <p>Please select your delivery address</p>
+            </div>
+            <hr />
+        </div>
 
-                                        {% csrf_token %}
-                                        <h3 class="mb-4">Sign In</h3>
 
-                                        {% if form.errors %}
-                                        <div class="alert alert-primary" role="alert">
-                                            Error: Username or Password not correct!
-                                        </div>
+        <div class="container">
+            <div class="row g-3">
+                {% if addresses|length == 0 %}
+                <div class="col-12">There are no delivery addresses, <a href="{% url 'add_address' %}">add
+                        address</a></div>
+                {% else %}
+                <div class="col-md-4 col-lg-4 order-md-last p-0 order-3">
+
+                    <div class="d-flex bd-highlight ms-0">
+                        <div class="p-2 flex-grow-1 bd-highlight">Sub Total:</div>
+                        <div class="p-2 bd-highlight"><span class="fw-bold h5">£</span><span id="sub_total"
+                                class="fw-bold h5">{{basket.getCompletePrice}}</span></div>
+                    </div>
+                    <div class="d-flex bd-highlight">
+                        <div class="p-2 flex-grow-1 bd-highlight">Delivery Cost:</div>
+                        <div class="p-2 bd-highlight"><span class="fw-bold h5">£</span><span id="delivery_price"
+                                class="fw-bold h5">{{basket.getShippingCosts}}</span></div>
+                    </div>
+                    <div class="d-flex bd-highlight">
+                        <div class="p-2 flex-grow-1 bd-highlight">Total:</div>
+                        <div class="p-2 bd-highlight"><span class="fw-bold h5">£</span><span id="total"
+                                class="fw-bold h5">{{basket.getGrandTotal}}</span></div>
+                    </div>
+                    <a role="button" href="*" class="btn btn-success fw-bold w-100" type="button">Pay Securely</a>
+                </div>
+
+                <div class="col-md-7 col-lg-8">
+                    {% for address in addresses %}
+                    {% if not address.default %}
+                    <h1 class="h5 pt-4">Other Addresses</h1>
+                    {% endif %}
+                    <div class="card mb-3 border-1 rounded-0 product-item me-md-4" data-index="{{option.id}}">
+                        <div class="row g-0">
+                            <div class="col">
+                                <div class="card pb-3 rounded-0">
+                                    <div class="card-header bg-white small text-muted">
+                                        {% if address.default %}
+                                        Selected
                                         {% endif %}
-
-                                        <label class="form-label">{{ form.username.label}}</label>
-                                            {{ form.username}}
-
-                                            <label class="form-label">{{ form.password.label}}</label>
-                                                {{ form.password}}
-                                                <div class="d-grid gap-2">
-                                                    <input type="hidden" name="next" value="{{ next }}">
-                                                    <button class="btn btn-primary py-2 mb-4 mt-5 fw-bold" type="submit"
-                                                        value="Log-in">Sign in
-                                                    </button>
-                                                </div>
-                                                <p class="text-center pb-3">
-                                                    <a href="{% url "register" %}">Create an account</a>
-                                                </p>
-                                    </form>
-                                    <p class="text-center pt-4">
-                                        <a href="{% url "pwdreset" %}">Forgotten Password?</a>
-                                    </p>
+                                        &nbsp;
+                                    </div>
+                                    <div class="card-body small pb-1">
+                                        <p class="card-text m-0 fw-bold">{{address.full_name}}</p>
+                                        <p class="card-text m-0">{{address.address_line}}</p>
+                                        <p class="card-text m-0">{{address.address_line2}}</p>
+                                        <p class="card-text m-0">{{address.town_city}}</p>
+                                        <p class="card-text m-0">{{address.postcode}}</p>
+                                        <p class="card-text m-0">Phone number: {{address.phone}}</p>
+                                        <div class="pt-5">
+                                            <a href="{% url 'edit_address' address.id %}"
+                                                class="text-decoration-none">Edit</a>
+                                            {% if not address.default %}
+                                            | <a href="{% url 'set_default' address.id %}"
+                                                class="text-decoration-none">Select</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </div>
+                                </a>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
+                {% endif %}
             </div>
         </div>
 
@@ -304,6 +339,7 @@
         <script src="{% static 'js/contact-form-script.js'%}"></script>
         <script src="{% static 'js/custom.js' %}"></script>
         <script src="{% static 'js/register.js' %}"></script>
+
     </body>
 
 </html>
