@@ -243,4 +243,8 @@
         spanTotal.html('<strong>' + "Total: " + '</strong>' + calculateSubTotal(json));
     }
 
+
+    $(window).on("popstate", function(event) {
+        console.log("digga")
+    });
 }(jQuery));

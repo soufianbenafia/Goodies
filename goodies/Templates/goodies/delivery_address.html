@@ -121,7 +121,8 @@
                         <ul class="cart-list">
                             {% for item in basket %} {% with product=item.product %}
                             <li>
-                                <a class="photo"><img src="{{product.image.image.image}}" class="cart-thumb" alt="" /></a>
+                                <a class="photo"><img src="{{product.image.image.image}}" class="cart-thumb"
+                                        alt="" /></a>
                                 <h6><a>{{product.name}} </a></h6>
                                 <p>
                                     {{item.qty}} - <span class="price">{{item.total_price}}</span>
@@ -208,31 +209,30 @@
                     {% if not address.default %}
                     <h1 class="h5 pt-4">Other Addresses</h1>
                     {% endif %}
-                    <div class="card mb-3 border-1 rounded-0 product-item me-md-4" data-index="{{option.id}}">
+                    <div id="addresschoice" class="card mb-3 border-1 rounded-0 product-item"
+                        data-index="{{option.id}}">
                         <div class="row g-0">
                             <div class="col">
-                                <div class="card pb-3 rounded-0">
-                                    <div class="card-header bg-white small text-muted">
-                                        {% if address.default %}
-                                        Selected
+                                <div class="card-header bg-white small text-muted">
+                                    {% if address.default %}
+                                    <strong class="pl-3">Selected</strong>
+                                    {% endif %}
+                                    &nbsp;
+                                </div>
+                                <div class="card-body small pl-3 pb-1">
+                                    <p class="card-text m-0 fw-bold">{{address.full_name}}</p>
+                                    <p class="card-text m-0">{{address.address_line}}</p>
+                                    <p class="card-text m-0">{{address.address_line2}}</p>
+                                    <p class="card-text m-0">{{address.town_city}}</p>
+                                    <p class="card-text m-0">{{address.postcode}}</p>
+                                    <p class="card-text m-0">Phone number: {{address.phone}}</p>
+                                    <div class="pt-5">
+                                        <a href="{% url 'edit_address' address.id %}"
+                                            class="text-decoration-none">Edit</a>
+                                        {% if not address.default %}
+                                        | <a href="{% url 'set_default' address.id %}"
+                                            class="text-decoration-none">Select</a>
                                         {% endif %}
-                                        &nbsp;
-                                    </div>
-                                    <div class="card-body small pb-1">
-                                        <p class="card-text m-0 fw-bold">{{address.full_name}}</p>
-                                        <p class="card-text m-0">{{address.address_line}}</p>
-                                        <p class="card-text m-0">{{address.address_line2}}</p>
-                                        <p class="card-text m-0">{{address.town_city}}</p>
-                                        <p class="card-text m-0">{{address.postcode}}</p>
-                                        <p class="card-text m-0">Phone number: {{address.phone}}</p>
-                                        <div class="pt-5">
-                                            <a href="{% url 'edit_address' address.id %}"
-                                                class="text-decoration-none">Edit</a>
-                                            {% if not address.default %}
-                                            | <a href="{% url 'set_default' address.id %}"
-                                                class="text-decoration-none">Select</a>
-                                            {% endif %}
-                                        </div>
                                     </div>
                                 </div>
                                 </a>
@@ -323,6 +323,14 @@
         <!-- End Footer  -->
         <a href="#" id="back-to-top" title="Back to top" style="display: none">&uarr;</a>
 
+
+        <script type='text/javascript'>
+            $(window).on('beforeunload', function () {
+                {
+                    alert('Bye');
+                }
+            });
+        </script>
         <!-- ALL JS FILES -->
         <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
         <script src="{% static 'js/popper.min.js' %}"></script>

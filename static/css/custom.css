@@ -1,31 +1,55 @@
-/** ADD YOUR AWESOME CODES HERE **/
-
-.country-select-flag {
-    display: none;
-}
-
-
-/* @media (min-width: 1000px) {
+        /** ADD YOUR AWESOME CODES HERE **/
+        
+        .country-select-flag {
+            display: none;
+        }
+        /* @media (min-width: 1000px) {
     .container {
         max-width: 940px;
     }
 } */
-
-@media screen and (min-device-width: 1200px) and (max-device-width: 1600px) and (-webkit-min-device-pixel-ratio: 1) {
-    #addressCluster {
-        -ms-flex: 0 0 33.333333%;
-        flex: 0 0 33.333333%;
-        max-width: 33.333333%
-    }
-}
-
-
-/* ----------- Retina Screens ----------- */
-
-@media screen and (min-device-width: 1200px) and (max-device-width: 1600px) and (-webkit-min-device-pixel-ratio: 2) and (min-resolution: 192dpi) {
-    #addressCluster {
-        -ms-flex: 0 0 33.333333%;
-        flex: 0 0 33.333333%;
-        max-width: 33.333333%
-    }
-}
+        
+        @media screen and (min-device-width: 1200px) and (max-device-width: 1600px) and (-webkit-min-device-pixel-ratio: 1) {
+            #addressCluster {
+                -ms-flex: 0 0 33.333333%;
+                flex: 0 0 33.333333%;
+                max-width: 33.333333%
+            }
+            #delivery {
+                margin-left: 3rem !important;
+            }
+            #addresschoice {
+                width: 30rem;
+                margin-left: 3rem !important;
+            }
+        }
+        /* ----------- Retina Screens ----------- */
+        
+        @media screen and (min-device-width: 1200px) and (max-device-width: 1600px) and (-webkit-min-device-pixel-ratio: 2) and (min-resolution: 192dpi) {
+            #addressCluster {
+                -ms-flex: 0 0 33.333333%;
+                flex: 0 0 33.333333%;
+                max-width: 33.333333%
+            }
+            #addresschoice {
+                width: 30rem;
+                margin-left: 3rem !important;
+            }
+        }
+        /* 
+             ##Device = Tablets, Ipads (portrait)
+             ##Screen = B/w 768px to 1024px
+        */
+        
+        @media (min-width: 768px) and (max-width: 1024px) {
+            /* 
+            CSS */
+        }
+        /* 
+            ##Device = Tablets, Ipads (landscape)
+             ##Screen = B/w 768px to 1024px
+        */
+        
+        @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+            /* CSS */
+        }

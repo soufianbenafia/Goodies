@@ -154,7 +154,7 @@ class Basket():
         return basket
 
     def basket_update_delivery(self, deliveryprice=0):
-        total = self.getSubTotalWithTax() + Decimal(deliveryprice)
+        total = self.getSubTotalWithTax() + self.getShippingCosts(deliveryprice)
         return total
 
 
@@ -166,3 +166,7 @@ class Basket():
         self.save()
 
 
+    def clearPurchase(self):
+        if "purchase" in self.session:
+            del self.session["purchase"]
+            self.save()

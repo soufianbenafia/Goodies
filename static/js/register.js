@@ -11,7 +11,8 @@
 
     $("input[type=radio][name=deliveryOption]").on("change", function(e) {
         e.preventDefault();
-        console.log("trigger yes");
+        console.log("trigger yes")
+        $(this).attr("data-selected", "20");;
         $.ajax({
             type: "POST",
             url: 'basket_update_delivery',
@@ -26,4 +27,6 @@
             error: function(xhr, errmsg, err) {},
         });
     });
+
+
 }(jQuery));

@@ -38,32 +38,32 @@
     </head>
 
     <body>
-          <!-- Start Main Top -->
-          <div class="main-top">
-              <div class="container-fluid">
-                  <div class="row">
-                      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                          <div class="right-phone-box">
-                              <p>Call US :- <a href="#"> +11 900 800 100</a></p>
-                          </div>
-                          <div class="our-link">
-                              <ul>
-                                  <li>
-                                      <a href="{% url 'account' %}"><i class="fa fa-user s_color"></i> My Account</a>
-                                  </li>
-                                  <li>
-                                      <a href="#"><i class="fas fa-location-arrow"></i> Our location</a>
-                                  </li>
-                                  <li>
-                                      <a href="{% url 'register' %}"><i></i> Register Here</a>
-                                  </li>
-                              </ul>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <!-- End Main Top -->
+        <!-- Start Main Top -->
+        <div class="main-top">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="right-phone-box">
+                            <p>Call US :- <a href="#"> +11 900 800 100</a></p>
+                        </div>
+                        <div class="our-link">
+                            <ul>
+                                <li>
+                                    <a href="{% url 'account' %}"><i class="fa fa-user s_color"></i> My Account</a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fas fa-location-arrow"></i> Our location</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'register' %}"><i></i> Register Here</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Main Top -->
 
         <!-- Start Main Top -->
         <header class="main-header">
@@ -131,30 +131,30 @@
                     </div>
                     <!-- End Atribute Navigation -->
                 </div>
-                 <!-- Start Side Menu -->
-                 <div class="side">
-                     <a href="#" class="close-side"><i class="fa fa-times"></i></a>
-                     <li class="cart-box">
-                         <ul class="cart-list">
-                             {% for item in basket %} {% with product=item.product %}
-                             <li>
-                                 <a class="photo"><img src="{{product.image.image.image}}" class="cart-thumb"
-                                         alt="" /></a>
-                                 <h6><a>{{product.name}} </a></h6>
-                                 <p>
-                                     {{item.qty}} - <span class="price">{{item.total_price}}</span>
-                                 </p>
-                             </li>
-                             {% endwith %} {% endfor %}
+                <!-- Start Side Menu -->
+                <div class="side">
+                    <a href="#" class="close-side"><i class="fa fa-times"></i></a>
+                    <li class="cart-box">
+                        <ul class="cart-list">
+                            {% for item in basket %} {% with product=item.product %}
+                            <li>
+                                <a class="photo"><img src="{{product.image.image.image}}" class="cart-thumb"
+                                        alt="" /></a>
+                                <h6><a>{{product.name}} </a></h6>
+                                <p>
+                                    {{item.qty}} - <span class="price">{{item.total_price}}</span>
+                                </p>
+                            </li>
+                            {% endwith %} {% endfor %}
 
-                             <li class="total">
-                                 <a href="{% url 'cart' %}" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
-                                 <span class="float-right"><strong>Total</strong>: {{basket.getCompletePrice}}</span>
-                             </li>
-                         </ul>
-                     </li>
-                 </div>
-                 <!-- End Side Menu -->
+                            <li class="total">
+                                <a href="{% url 'cart' %}" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
+                                <span class="float-right"><strong>Total</strong>: {{basket.getCompletePrice}}</span>
+                            </li>
+                        </ul>
+                    </li>
+                </div>
+                <!-- End Side Menu -->
             </nav>
             <!-- End Navigation -->
         </header>
@@ -210,7 +210,7 @@
                                     {% with product=item.product %}
                                     <tr class="delete-itemcart" data-value="{{product.id}}">
                                         <td class="thumbnail-img">
-                                            <img class="img-fluid" src="{{product.image.url}}" alt="" />
+                                            <img class="img-fluid" src="{{product.image.image.image}}" alt="" />
                                         </td>
                                         <td class="name-pr">
                                             <a href="#">
@@ -263,6 +263,8 @@
                     </div>
                     <div class="col-12 d-flex shopping-box"><a href="{% url 'deliverychoices' %}"
                             class="ml-auto btn hvr-hover">Checkout</a> </div>
+                    <input type="hidden" id="refreshhh" value="no">
+
                 </div>
 
             </div>
@@ -413,10 +415,26 @@
         </footer>
         <!-- End Footer  -->
 
-
         <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
         <!-- ALL JS FILES -->
+
+        <script>
+            function printNavTimingData() {
+                // Use getEntriesByType() to just get the "navigation" events
+                performance.getEntriesByType("navigation")
+                    .forEach((p, i) => {
+                        console.log("false");
+                        // Other properties
+                        if (`${p.type}` === 'back_forward') {
+                            console.log("reload");
+                            location.reload(true);
+                        }
+                    });
+            }
+
+            printNavTimingData()
+        </script>
         <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
         <script src="{% static 'js/popper.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.min.js' %}"></script>

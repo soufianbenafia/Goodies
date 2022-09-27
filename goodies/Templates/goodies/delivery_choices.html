@@ -191,7 +191,7 @@
                         {% endif %}
                         <div class="row g-3">
                             {% if deliveryoptions|length == 0 %}
-                            <div class="col-12 text-center">There are no delivery options 
+                            <div class="col-12 text-center">There are no delivery options
                                 <a href="{% url 'shop' %}"><strong>Go to the Shop</strong></a></div>
                             {% else %}
                             <div class="col-md-4 col-lg-4 order-md-last p-0 order-3">
@@ -222,7 +222,7 @@
                             </div>
                             <div class="col-md-7 col-lg-8">
                                 {% for option in deliveryoptions %}
-                                <div class="card mb-3 border-1 rounded-0 product-item me-md-4"
+                                <div id="delivery" class="card mb-3 border-1 rounded-0 product-item  col-lg-8"
                                     data-index="{{option.id}}">
                                     <div class="row g-0">
                                         <div class="col-md-2 ps-3 ps-md-4">
@@ -240,8 +240,10 @@
                                             </div>
                                         </div>
                                         <div class="col-md-1 ps-md-1">
-                                            <input class="align-middle h-100" type="radio" name="deliveryOption"
-                                                id="{{option.id}}" value="{{option.id}}">
+                                            <input id="deliveryOption" class="align-text-bottom h-100" type="radio"
+                                                name="deliveryOption" id="{{option.id}}" value="{{option.id}}"
+                                                checked="checked">
+                                            <input type="hidden" id="refresh" value="no">
                                         </div>
                                     </div>
                                 </div>
@@ -255,7 +257,6 @@
         </div>
 
         <br> </br>
-
 
         <!-- Start Footer  -->
         <footer>
@@ -336,6 +337,34 @@
         <a href="#" id="back-to-top" title="Back to top" style="display: none">&uarr;</a>
 
         <!-- ALL JS FILES -->
+
+
+
+        <script>
+            $(document).ready(function () {
+                if (localStorage.selected) {
+                    $('#' + localStorage.selected).attr('checked', true);
+                }
+                $('#deliveryOption').click(function () {
+                    localStorage.setItem("selected", this.id);
+                });
+            });
+        </script>
+
+        <script>
+            function printNavTimingData() {
+                // Use getEntriesByType() to just get the "navigation" events
+                performance.getEntriesByType("navigation")
+                    .forEach((p, i) => {
+                        // Other properties
+                        if (`${p.type}` === 'back_forward') {
+                            console.log("reload");
+                            location.reload(true)
+                        }
+                    });
+            }
+            printNavTimingData();
+        </script>
         <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
         <script src="{% static 'js/popper.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -352,6 +381,8 @@
         <script src="{% static 'js/contact-form-script.js'%}"></script>
         <script src="{% static 'js/custom.js' %}"></script>
         <script src="{% static 'js/register.js' %}"></script>
+        <script src="{% static 'js/cart.js' %}"></script>
+
     </body>
 
 </html>
