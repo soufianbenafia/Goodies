@@ -140,3 +140,4 @@ LOGIN_URL = '/goodies/login/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 COUNTRIES_FLAG_URL = 'flags/{code}_16.png'
+BASKET_SESSION_ID = "basket"

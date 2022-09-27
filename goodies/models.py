@@ -1,12 +1,12 @@
+from distutils.command.upload import upload
 from django.urls import reverse
 from django.db import models
 import uuid
-from django_extensions.db.fields import AutoSlugField
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
 from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
-from django.core import serializers
+from django.conf import settings
 
 
 class ProductManager(models.Manager):
@@ -112,21 +112,20 @@ class Address(models.Model):
 
 class Product(models.Model):
     categoryID = models.ForeignKey(Category, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=4, decimal_places=2)
     availability = models.IntegerField(default=10)
     discription = models.TextField(blank=True, null=True)
     slug = models.SlugField()
-    image = models.ImageField()
+    image = models.FileField()
     objects = models.Manager()
     products = ProductManager()
 
     def get_absolute_url(self):
         return reverse('shopdetail', args=[self.slug])
 
-    def __str__(self):
-        return self.name
-    
+    def __unicode__(self):
+            return (self.name)
 
 
 class ProductDetailImage(models.Model):
@@ -138,23 +137,38 @@ class ProductDetailImage(models.Model):
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(
-        Customer, on_delete=models.SET_NULL, null=True, blank=True)
-    quantity = models.IntegerField()
-    date_ordered = models.DateTimeField(auto_now_add=True, null=True)
-    totalAmount = models.DecimalField(max_digits=4, decimal_places=2)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE, related_name="order_user")
+    full_name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=254, blank=True)
+    address1 = models.CharField(max_length=250)
+    address2 = models.CharField(max_length=250)
+    city = models.CharField(max_length=100)
+    phone = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=20)
+    country_code = models.CharField(max_length=4, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    total_paid = models.DecimalField(max_digits=5, decimal_places=2)
+    order_key = models.CharField(max_length=200)
+    payment_option = models.CharField(max_length=200, blank=True)
+    billing_status = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ("-created",)
 
     def __str__(self):
-        return self.id
+        return str(self.created)
 
 
 class OrderItem(models.Model):
-    productID = models.OneToOneField(
-        Product, on_delete=models.SET_NULL, null=True, blank=True)
-    orderID = models.ForeignKey(Order, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-    date_added = models.DateTimeField(auto_now_add=True, null=True)
-    amount = models.DecimalField(max_digits=4, decimal_places=2)
+    order = models.ForeignKey(Order, related_name="items", on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name="order_items", on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return str(self.id)
 
 
 class DeliveryOptions(models.Model):
@@ -206,3 +220,24 @@ class DeliveryOptions(models.Model):
 
     def __str__(self):
         return self.delivery_name
+
+
+class PaymentSelections(models.Model):
+    """
+    Store payment options
+    """
+
+    name = models.CharField(
+        verbose_name=_("name"),
+        help_text=_("Required"),
+        max_length=255,
+    )
+
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = _("Payment Selection")
+        verbose_name_plural = _("Payment Selections")
+
+    def __str__(self):
+        return self.name
