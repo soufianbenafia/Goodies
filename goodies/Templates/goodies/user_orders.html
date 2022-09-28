@@ -179,67 +179,67 @@
                     <hr />
                     <div class="container">
                         {% for order in orders %}
-                        <div class="row g-3">
-                                <div class="table-main table-responsive mb-3">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Created</th>
-                                                <th>Image</th>
-                                                <th>Product Name</th>
-                                                <th>Price</th>
-                                                <th>Quantity</th>
-                                                <th>Total</th>
-                                                <th>Dispacted to</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for item in order.items.all %}
-                                            <tr class="delete-itemcart">
-                                                <td class="name-pr">
-                                                    <a href="#">{{item.order.created}}<a>
-                                                </td>
-                                                <td class="thumbnail-img">
-                                                    <img class="img-fluid" src="{{item.product.image.url}}" alt="" />
-                                                </td>
-                                                <td class="name-pr">
-                                                    <a href="#">{{item.product.name}}<a>
-                                                </td>
-                                                <td class="name-pr">
-                                                    <a href="#">{{item.price}}<a>
-                                                </td>
-                                                <td class="name-pr">
-                                                    <a href="#">{{item.quantity}}<a>
-                                                </td>
-                                                <td class="name-pr">
-                                                    <a href="#">€{{item.order.total_paid}}<a>
-                                                </td>
-                                                <td>
-                                                    <p>{{item.order.full_name}}</p>
-                                                    <p>{{item.order.address1}}</p>
-                                                    <p>{{item.order.address2}}, {{item.order.postal_code}}</p>
-                                                </td>
-                                                <td class="btn-group-vertical">
-                                                    <button class="float-right btn btn-warning" type="button">Problem
-                                                        with order</button>
-                                                    <button class="btn btn-light" type="button">
-                                                        <a href="{{item.product.get_absolute_url }}">
-                                                            View Productdetail</button>
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                        <div class="col-lg-12">
+                            <div class="table-main table-responsive mb-3">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Created</th>
+                                            <th>Image</th>
+                                            <th>Product Name</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                            <th>Dispacted to</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in order.items.all %}
+                                        <tr class="delete-itemcart">
+                                            <td class="name-pr">
+                                                <a href="#">{{item.order.created}}<a>
+                                            </td>
+                                            <td class="thumbnail-img">
+                                                <img class="img-fluid" src="{{item.product.image.url}}" alt="" />
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="#">{{item.product.name}}<a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="#">{{item.price}}<a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="#">{{item.quantity}}<a>
+                                            </td>
+                                            <td class="name-pr">
+                                                <a href="#">€{{item.order.total_paid}}<a>
+                                            </td>
+                                            <td>
+                                                <p>{{item.order.full_name}}</p>
+                                                <p>{{item.order.address1}}</p>
+                                                <p>{{item.order.address2}}, {{item.order.postal_code}}</p>
+                                            </td>
+                                            <td class="btn-group-vertical">
+                                                <button class="float-right btn btn-warning" type="button">Problem
+                                                    with order</button>
+                                                <button class="btn btn-light" type="button">
+                                                    <a href="{{item.product.get_absolute_url }}">
+                                                        View Productdetail</button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
-                            {% endfor %}
                         </div>
-
+                        {% endfor %}
                     </div>
+
                 </div>
             </div>
-            <br></br>
+        </div>
+        <br></br>
 
 
         </div>
