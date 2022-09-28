@@ -360,3 +360,9 @@ def payment_successful(request):
     basket = Basket(request)
     basket.clear()
     return render(request, "goodies/payment_successful.html", {})
+
+
+def user_orders(request):
+    user_id = request.user.id
+    orders = Order.objects.filter(user_id=user_id).filter(billing_status=True)
+    return render(request, "goodies/user_orders.html", {'orders':orders})

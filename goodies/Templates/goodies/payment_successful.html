@@ -167,17 +167,28 @@
             }
         </style>
 
+
+
         <div class="container-fluid">
-            <div class="row no-gutter">
-                <div class="col-md-12">
-                    <div class="login d-flex align-items-center py-5">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-12 col-lg-6  mx-auto">
-                                    <div class="p-4">
-                                        <h3 class="mb-4">Payment successful</h3>
-                                        <a href="{% url "account" %}"></a>
-                                    </div>
+            <div style="background: #f5f5f5;padding-bottom:100px;padding-top:100px">
+                <div class="row bootstrap snippets bootdeys">
+                    <div class="col-md-12 col-md-offset-3">
+                        <div class="m-t-30 card-box ">
+                            <div class="text-center">
+                                <h4 class="text-uppercase font-bold m-b-0">Success !!</h4>
+                            </div>
+                            <div class="panel-body text-center">
+                                <i class="fa-solid fa-circle-check fa-9x"></i>
+                                <p class="text-muted font-13 m-t-20" style="color: #9a9da0">
+                                    <h3 class="mb-4">Payment successful</h3>
+                                    <a href="{% url "account" %}"></a>
+                                </p>
+                                <div class="col-12">
+                                    <p>Order Summary</p>
+                                </div>
+                                <hr />
+                                <div class="col-12">
+                                    <p>View all <a href="{% url 'user_orders'%}">orders</a></p>
                                 </div>
                             </div>
                         </div>

@@ -124,8 +124,8 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('shopdetail', args=[self.slug])
 
-    def __unicode__(self):
-            return (self.name)
+    def __str__(self):
+        return self.name
 
 
 class ProductDetailImage(models.Model):
